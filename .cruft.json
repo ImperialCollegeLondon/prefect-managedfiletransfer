@@ -1,0 +1,21 @@
+{
+  "template": "https://github.com/PrefectHQ/prefect-collection-template",
+  "commit": "eea057f609b4c06ec802967ae8982880845cef6f",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "full_name": "Alastair Crabtree",
+      "email": "a.crabtree@imperial.ac.uk",
+      "github_organization": "ImperialCollegeLondon",
+      "collection_name": "prefect-managedfiletransfer",
+      "collection_slug": "prefect_managedfiletransfer",
+      "collection_short_description": "Upload and download files easily between Local/SFTP/Cloud storage using rclone",
+      "_copy_without_render": [
+        ".github/workflows/*.yml"
+      ],
+      "_template": "https://github.com/PrefectHQ/prefect-collection-template",
+      "_commit": "eea057f609b4c06ec802967ae8982880845cef6f"
+    }
+  },
+  "directory": null
+}
