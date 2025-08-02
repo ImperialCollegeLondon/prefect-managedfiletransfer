@@ -12,9 +12,7 @@ from types import ModuleType
 from typing import Callable, Set, Union
 
 import mkdocs_gen_files
-from griffe.dataclasses import Docstring
-from griffe.docstrings.dataclasses import DocstringSectionKind
-from griffe.docstrings.parsers import Parser, parse
+from griffe import Docstring, DocstringSectionKind, Parser, parse
 from prefect.logging.loggers import disable_logger
 from prefect.utilities.importtools import load_module, to_qualified_name
 

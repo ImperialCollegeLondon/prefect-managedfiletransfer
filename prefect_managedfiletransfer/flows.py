@@ -1,7 +1,7 @@
 """This is an example flows module"""
 from prefect import flow
 
-from prefect_managedfiletransfer.blocks import ManagedfiletransferBlock
+from prefect_managedfiletransfer.blocks import ServerWithBasicAuthBlock
 from prefect_managedfiletransfer.tasks import (
     goodbye_prefect_managedfiletransfer,
     hello_prefect_managedfiletransfer,
@@ -13,12 +13,13 @@ def hello_and_goodbye():
     """
     Sample flow that says hello and goodbye!
     """
-    ManagedfiletransferBlock.seed_value_for_example()
-    block = ManagedfiletransferBlock.load("sample-block")
+    ServerWithBasicAuthBlock.seed_value_for_example()
+    block = ServerWithBasicAuthBlock.load("sample-block")
 
     print(hello_prefect_managedfiletransfer())
-    print(f"The block's value: {block.value}")
+    print(f"The block's contents: {block.host}:{block.port} as {block.username}")
     print(goodbye_prefect_managedfiletransfer())
+
     return "Done"
 
 
