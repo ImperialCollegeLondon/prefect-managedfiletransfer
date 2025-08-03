@@ -119,3 +119,12 @@ pip install -e ".[dev]"
 pre-commit install
 ```
 8. `git commit`, `git push`, and create a pull request
+
+
+
+## uv version
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install -e ".[dev]"
+```

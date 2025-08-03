@@ -20,7 +20,7 @@ class ServerWithBasicAuthBlock(Block):
         Load a stored value:
         ```python
         from prefect_managedfiletransfer import ServerWithBasicAuthBlock
-        block = ServerWithBasicAuthBlock.load("my-block")
+        block = ServerWithBasicAuthBlock.load("BLOCK_NAME")
         ```
     """
 
