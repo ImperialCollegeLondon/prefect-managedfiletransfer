@@ -24,7 +24,7 @@ setup(
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(exclude=("tests", "docs")),
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     install_requires=install_requires,
     extras_require={"dev": dev_requires},
     entry_points={
