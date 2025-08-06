@@ -1,0 +1,116 @@
+[project]
+name = "prefect-managedfiletransfer"
+version = "0.1.0"
+description = "Upload and download files easily between Local/SFTP/Cloud storage using rclone"
+keywords = ["prefect"]
+readme = "README.md"
+authors = [
+    {name = "Alastair Crabtree", email = "a.crabtree@imperial.ac.uk"},
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "prefect>=3.1.7",
+    "pydantic>=2.11.0a2",
+]
+license = "Apache-2.0"
+
+[project.urls]
+Homepage = "https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer"
+
+[project.entry-points."prefect.collections"]
+prefect_managedfiletransfer = "prefect_managedfiletransfer"
+
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = false
+packages = ["prefect_managedfiletransfer"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.7",
+    "build",
+    "coverage[toml]",
+    "interrogate",
+    "ruff",
+    "mkdocs",
+    "mkdocs-gen-files",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "mypy",
+    "pillow",
+    "pre-commit",
+    "pytest",
+    "pytest-asyncio",
+]
+
+[tool.coverage.run]
+branch = true
+omit = [
+    # Don't include the tests in the coverage report:
+    "tests/*",
+    # Don't include the version file in the coverage report:
+    "prefect_managedfiletransfer/_version.py",
+]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+    ]
+
+ignore_errors = true
+
+# [tool.coverage.html]
+# directory = "coverage_html_report"
+
+[tool.interrogate]
+ignore-init-module = true
+ignore_init_method = true
+exclude = [
+    "prefect_managedfiletransfer/_version.py",
+    "tests",
+    "docs",
+    "site",
+    ".uv_cache"
+]
+fail-under = 95
+omit-covered-files = true
+
+[tool.pytest]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+python_paths = [
+    "prefect_managedfiletransfer",
+]
+env = ["PREFECT_TEST_MODE=1"]
+
+[tool.uv]
+cache-dir = "./.uv_cache"

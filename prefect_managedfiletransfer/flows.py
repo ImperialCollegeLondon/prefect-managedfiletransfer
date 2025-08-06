@@ -1,4 +1,5 @@
 """This is an example flows module"""
+
 from prefect import flow
 
 from prefect_managedfiletransfer.blocks import ServerWithBasicAuthBlock

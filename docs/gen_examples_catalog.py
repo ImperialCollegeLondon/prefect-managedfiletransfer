@@ -70,7 +70,6 @@ def get_code_examples(obj: Union[ModuleType, Callable]) -> Set[str]:
 
 code_examples_grouping = defaultdict(set)
 for _, module_name, ispkg in iter_modules(prefect_managedfiletransfer.__path__):
-
     module_nesting = f"{COLLECTION_SLUG}.{module_name}"
     module_obj = load_module(module_nesting)
 
