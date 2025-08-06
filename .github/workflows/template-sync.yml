@@ -27,6 +27,9 @@ jobs:
         with:
           app-id: ${{ vars.SYNC_APP_ID }}
           private-key: ${{ secrets.SYNC_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            prefect-managedfiletransfer
 
       - name: Submit PR
         uses: peter-evans/create-pull-request@v4
