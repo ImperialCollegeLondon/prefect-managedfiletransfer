@@ -23,6 +23,8 @@ logging.getLogger("httpcore.connection").setLevel(logging.INFO)
 logging.getLogger("httpcore.http11").setLevel(logging.INFO)
 logging.getLogger("asyncio:selector_events.py").setLevel(logging.INFO)
 
+logger = logging.getLogger(__name__)
+
 
 @pytest.fixture(scope="session", autouse=False)
 def prefect_db():
@@ -103,8 +105,14 @@ def temp_file_path() -> Generator[Path, None, None]:
 
     with tempfile.NamedTemporaryFile() as temp_file:
         # Write some content to the temporary file
-        temp_file.write(b"test-input-file")
+
+        temp_file.write(b"test-input-file\n")
+        test_data = b"0" * 1000
+        temp_file.write(test_data)
         temp_file.flush()  # Ensure the content is written to disk
+
+        logger.debug(f"Temporary file created at: {temp_file.name}")
+
         yield Path(temp_file.name)
 
 
@@ -113,4 +121,6 @@ def temp_folder_path() -> Generator[Path, None, None]:
     """Fixture to create a temporary folder for testing."""
 
     with tempfile.TemporaryDirectory() as temp_dir:
+        logger.debug(f"Temporary folder created at: {temp_dir}")
+
         yield Path(temp_dir)
