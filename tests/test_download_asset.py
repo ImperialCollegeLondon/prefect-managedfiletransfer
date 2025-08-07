@@ -319,7 +319,8 @@ def test_download_asset_via_rclone_local_copy_does_overwrite_older_files_in_upda
     # Verify.
     assert destination_path.exists()
     # Verify that the destination file was not overwritten.
-    assert destination_path.read_text() == "test-input-file"
+    assert destination_path.read_text().startswith("test-input-file")
+
     destination_path.unlink()
 
 

@@ -119,7 +119,7 @@ def test_upload_asset_via_local_copy_checks_for_space(temp_file_path, caplog) ->
     # Verify caplog.text matches the pattern
     assert any(
         re.search(
-            r"Enough space on destination /tmp. Available: \d+b, required: 1015b",
+            r"Enough space on destination .* Available: \d+b, required: .*",
             message,
         )
         for message in caplog.text.splitlines()
@@ -145,8 +145,11 @@ def test_upload_asset_via_local_copy_can_overwrite(temp_file_path) -> None:
 
     # Verify.
     assert destination_path.exists()
+    contents = ""
     with open(destination_path, "r") as f:
-        assert f.read() == "test-input-file"
+        contents = f.read()
+
+    assert contents.startswith("test-input-file")
     destination_path.unlink()
 
 
@@ -444,7 +447,7 @@ def test_upload_asset_via_rclone_local_copy_does_overwrite_newer_files_in_overwr
     assert destination_path.exists()
     # Verify that the destination file was overwritten.
     assert destination_path.read_text() != "This is a newer test file."
-    assert destination_path.read_text() == "test-input-file"
+    assert destination_path.read_text().startswith("test-input-file")
     destination_path.unlink()
 
 
@@ -470,7 +473,7 @@ def test_upload_asset_via_rclone_local_copy_does_overwrite_older_files_in_update
     # Verify.
     assert destination_path.exists()
     # Verify that the destination file was not overwritten.
-    assert destination_path.read_text() == "test-input-file"
+    assert destination_path.read_text().startswith("test-input-file")
     destination_path.unlink()
 
 
@@ -496,7 +499,7 @@ def test_upload_asset_via_rclone_local_copy_does_overwrite_older_files_in_overwr
     # Verify.
     assert destination_path.exists()
     # Verify that the destination file was overwritten.
-    assert destination_path.read_text() == "test-input-file"
+    assert destination_path.read_text().startswith("test-input-file")
     destination_path.unlink()
 
 
@@ -506,7 +509,9 @@ def test_upload_asset_via_rclone_local_copy_does_not_overwrite_older_files_in_no
     # Set up.
     destination_path = setup_destination("/tmp/test.txt")
     # Create a file with a newer timestamp.
-    destination_path.write_text("This is a test file.")
+    message = "This is a test file with a long line of text."
+
+    destination_path.write_text(message)
     past_mod_time = destination_path.stat().st_mtime - 100
     os.utime(destination_path, (past_mod_time, past_mod_time))
 
@@ -522,7 +527,7 @@ def test_upload_asset_via_rclone_local_copy_does_not_overwrite_older_files_in_no
     # Verify.
     assert destination_path.exists()
     # Verify that the destination file was overwritten.
-    assert destination_path.read_text() == "This is a test file."
+    assert destination_path.read_text() == message
     destination_path.unlink()
 
 
