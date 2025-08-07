@@ -106,7 +106,9 @@ def invoke_rclone(
             cmd.insert(1, "-v")
             logger.debug("Added -v to command for verbose output")
 
-        if not cmd or not cmd[0].endswith("rclone"):
+        if not cmd or (
+            not cmd[0].endswith("rclone") and not cmd[0].endswith("rclone.exe")
+        ):
             logger.error("Command must start with 'rclone' or /path/to/rclone")
             return (
                 1,
