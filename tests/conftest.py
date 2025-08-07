@@ -1,6 +1,7 @@
 import logging
 import os
 from pathlib import Path
+import sys
 import tempfile
 import pytest
 from prefect_managedfiletransfer.main import app
@@ -48,6 +49,9 @@ def sftp_creds() -> SFTPUser:
 @pytest.fixture(autouse=False)
 def sftp_server(sftp_creds: SFTPUser) -> Generator[SFTPContainer, None, None]:
     """Fixture to start an SFTP server in a container."""
+
+    if sys.platform.startswith("win"):
+        pytest.skip("skipping SFTP tests on winodws - needs docker!")
 
     users = [sftp_creds]
 
