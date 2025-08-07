@@ -45,11 +45,13 @@ Install `prefect-managedfiletransfer` with `pip`:
 
 ```bash
 pip install prefect-managedfiletransfer
+# or 
+uv add prefect-managedfiletransfer
 ```
 
-Requires an installation of Python 3.8+.
+Requires an installation of Python 3.10+.
 
-We recommend using a Python virtual environment manager such as pipenv, conda or virtualenv.
+We recommend using a Python virtual environment manager such as uv, pipenv, conda or virtualenv.
 
 These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the [Prefect documentation](https://docs.prefect.io/).
 
@@ -109,8 +111,17 @@ Here are the steps:
 2. [Clone the forked repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository)
 3. Install the repository and its dependencies:
 ```
-pip install -e ".[dev]"
+# install uv first, then
+uv sync
 ```
+
+You can also access all the prefect CLI tooling inside a uv managed venv
+```
+uv venv
+source .venv/bin/activate
+prefect server start
+```
+
 4. Make desired changes
 5. Add tests
 6. Insert an entry to [CHANGELOG.md](https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer/blob/main/CHANGELOG.md)
@@ -118,13 +129,9 @@ pip install -e ".[dev]"
 ```
 pre-commit install
 ```
-8. `git commit`, `git push`, and create a pull request
+8. use the build script to run all the checks and tests:
 
-
-
-## uv version
-```bash
-uv venv
-source .venv/bin/activate
-uv pip install -e ".[dev]"
 ```
+./build.sh
+```
+8. `git commit`, `git push`, and create a pull request

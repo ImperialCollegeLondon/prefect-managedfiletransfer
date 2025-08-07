@@ -2,7 +2,9 @@
 
 from prefect import flow
 
-from prefect_managedfiletransfer.blocks import ServerWithBasicAuthBlock
+from prefect_managedfiletransfer.ServerWithBasicAuthBlock import (
+    ServerWithBasicAuthBlock,
+)
 from prefect_managedfiletransfer.tasks import (
     goodbye_prefect_managedfiletransfer,
     hello_prefect_managedfiletransfer,

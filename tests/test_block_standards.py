@@ -5,7 +5,11 @@ import prefect_managedfiletransfer
 
 
 def find_module_blocks():
-    return [prefect_managedfiletransfer.blocks.ServerWithBasicAuthBlock]
+    return [
+        prefect_managedfiletransfer.ServerWithBasicAuthBlock,
+        prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock,
+        prefect_managedfiletransfer.RCloneConfigFileBlock,
+    ]
 
 
 @pytest.mark.parametrize("block", find_module_blocks())

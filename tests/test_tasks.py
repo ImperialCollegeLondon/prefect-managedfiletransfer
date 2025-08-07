@@ -6,7 +6,7 @@ from prefect_managedfiletransfer.tasks import (
 )
 
 
-def test_hello_prefect_managedfiletransfer():
+def test_hello_prefect_managedfiletransfer(prefect_db):
     @flow
     def test_flow():
         return hello_prefect_managedfiletransfer()
@@ -15,7 +15,7 @@ def test_hello_prefect_managedfiletransfer():
     assert result == "Hello, prefect-managedfiletransfer!"
 
 
-def goodbye_hello_prefect_managedfiletransfer():
+def goodbye_hello_prefect_managedfiletransfer(prefect_db):
     @flow
     def test_flow():
         return goodbye_prefect_managedfiletransfer()

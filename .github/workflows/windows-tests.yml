@@ -11,7 +11,6 @@ jobs:
       matrix:
         # Prefect only tests some versions on Windows - see https://github.com/PrefectHQ/prefect/blob/main/.github/workflows/windows-tests.yaml
         python-version:
-          - "3.9"
           - "3.12"
       fail-fast: false
     steps:
