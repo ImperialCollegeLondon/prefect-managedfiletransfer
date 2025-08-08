@@ -1,7 +1,10 @@
 
 name: Windows Tests
 
-on: [pull_request, workflow_dispatch]
+on: [
+      # pull_request, # REMOVED as windows suppoprt lacking - see https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer/issues/12
+      workflow_dispatch
+      ]
 
 jobs:
   run-tests:
