@@ -46,7 +46,7 @@ def convert_to_seconds(
 
     # if the text contains "month" or "year" parse it manually as we can be rough!
     if re.search(
-        r"\b(month|year)\b",
+        r"(month|year|yr)\b",
         duration_text_or_seconds_or_timedelta,
         re.IGNORECASE,
     ):
@@ -56,7 +56,7 @@ def convert_to_seconds(
             re.IGNORECASE,
         )
         years = re.search(
-            r"(\d+)\s*year",
+            r"(\d+)\s*(year|yr)",
             duration_text_or_seconds_or_timedelta,
             re.IGNORECASE,
         )
