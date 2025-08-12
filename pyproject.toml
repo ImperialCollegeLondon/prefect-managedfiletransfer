@@ -2,7 +2,7 @@
 name = "prefect-managedfiletransfer"
 version = "0.1.0"
 description = "Upload and download files easily between Local/SFTP/Cloud storage using rclone"
-keywords = ["prefect"]
+keywords = ["prefect", "file", "copy","move","transfer","SFTP","rclone"]
 readme = "README.md"
 authors = [
     {name = "Alastair Crabtree", email = "a.crabtree@imperial.ac.uk"},
@@ -19,9 +19,9 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "paramiko>=4.0.0",
     "prefect>=3.1.7",
     "pydantic>=2.11.0a2",
+    "paramiko>=4.0.0",
 ]
 license = "Apache-2.0"
 
@@ -60,6 +60,7 @@ dev = [
     "pytest-asyncio",
     "typer",
     "testcontainers>=4.12.0",
+    "prefect-docker>=0.6.6",
 ]
 
 [tool.coverage.run]

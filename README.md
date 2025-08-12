@@ -29,8 +29,9 @@ Key features
 - Repath files as you move them.
 - Complex filtering and ordering of files - by path, age, size etc. Pattern matching with regular expressions.
 - Leverage Prefect.IO built in scheduling and orchestration capabilities:
-    - Transfer files on complex cron schedules, add notifications on success/failure - using the built in prefect functionality.
-    - Supports a highly available server architecture - database server + multi-node workers and front ends.
+    - Transfer files on complex cron schedules
+    - notifications on success/failure - slack, email, etc
+    - Highly available server architecture - database server + multi-node workers and front ends.
 
 Example use cases:
 
@@ -53,7 +54,8 @@ uv add prefect-managedfiletransfer
 
 We recommend using a Python virtual environment manager such as uv, pipenv, conda or virtualenv.
 
-In one terminal start a prefect server, (probably in a venv)
+In one (venv) terminal start a prefect server with logs enabled
+
 ```bash
 export PREFECT_LOGGING_LEVEL="INFO"
 export PREFECT_LOGGING_EXTRA_LOGGERS="prefect_managedfiletransfer"
@@ -61,34 +63,51 @@ prefect server start
 # OR uv run prefect server start
 ```
 
+There are many ways to manage infrastructure and code with prefect - here we demonstate starting a local worker:
 
+```bash
+export PREFECT_API_URL=http://127.0.0.1:4200/api
+# or perhaps export PREFECT_API_URL=http://host.docker.internal:4200/api
+export PREFECT_LOGGING_EXTRA_LOGGERS="prefect_managedfiletransfer"
+export PREFECT_LOGGING_LEVEL="INFO"
+# [Optional] add all logs: export PREFECT_LOGGING_ROOT_LEVEL="INFO"
+
+
+prefect worker start --pool 'default-pool' --type process
+# OR prefect worker start --pool 'default-pool' --type docker
+
+```
+    
 Install the blocks using the prefect CLI
 
 ```bash
 prefect block register -m prefect_managedfiletransfer
 ```
 
-Deploy the flows. The `transfer_files_flow` is the best place to start - it can be deployed using the following command:
+And then deploy the flows. 
 
 ```bash
-# local worker
-prefect work-pool create default-pool --type process --overwrite
-prefect config set PREFECT_API_URL=http://127.0.0.1:4200/api
-uv run python prefect_managedfiletransfer/deploy.py
-export PREFECT_LOGGING_EXTRA_LOGGERS="prefect_managedfiletransfer"
-export PREFECT_LOGGING_LEVEL="INFO"
-# OR add everyting - export PREFECT_LOGGING_ROOT_LEVEL="INFO"
-prefect worker start --pool 'default-pool'
-# TODO
+# deploy the flows to run locally
+python -m prefect_managedfiletransfer.deploy --local
+
+# OR deploy to run with a docker image - see deploy.py
+python -m prefect_managedfiletransfer.deploy --docker
+
+# or a version of the above using uv run:
+uv run python -m prefect_managedfiletransfer.deploy --local
+uv run python -m prefect_managedfiletransfer.deploy --docker
 ```
+
+Visit the server UI http://localhost:4200.
+1. Create 2 blocks, one source and one destination
+2. On the deployments page start a `transfer_files_flow`. Configure your flow run to copy/move files between the 2 blocks.
 
 ### Installation via docker
 
-```
+```bash
 # run prefect server in a container port-forwarded to your local machine’s 4200 port:
 docker run -d -p 4200:4200 prefecthq/prefect:3-latest -- prefect server start --host 0.0.0.0
 ```
-
 
 ### List of components
 

@@ -1,0 +1,9 @@
+*
+.venv
+__pycache__
+*.egg-info
+.git*
+!prefect_managedfiletransfer/rclone/rclone
+!prefect_managedfiletransfer/*.py
+!uv.lock
+!pyproject.toml
