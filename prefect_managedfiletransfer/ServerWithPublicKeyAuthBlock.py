@@ -67,7 +67,7 @@ class ServerWithPublicKeyAuthBlock(Block):
     """
 
     _logo_url = CONSTANTS.SERVER_LOGO_URL
-    _block_type_name = "server_with_public_key_auth"
+    _block_type_name = "Server - Public Key Auth [ManagedFileTransfer]"
     _documentation_url = "https://ImperialCollegeLondon.github.io/prefect-managedfiletransfer/blocks/#prefect-managedfiletransfer.blocks.ServerWithPublicKeyAuthBlock"  # noqa
 
     username: str = Field(

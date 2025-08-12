@@ -3,6 +3,10 @@ from pathlib import Path
 
 
 class AssetDownloadResult:
+    """
+    Represents the result of an asset download operation.
+    """
+
     def __init__(
         self,
         success: bool,

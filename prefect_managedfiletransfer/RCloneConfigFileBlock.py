@@ -37,7 +37,7 @@ class RCloneConfigFileBlock(Block):
         ```
     """
 
-    _block_type_name = "rclone_config_file"
+    _block_type_name = "RClone Remote Config File [ManagedFileTransfer]"
     _logo_url = "https://github.com/rclone/rclone/blob/master/graphics/logo/logo_symbol/logo_symbol_color_64px.png?raw=true"
     _documentation_url = "https://ImperialCollegeLondon.github.io/prefect-managedfiletransfer/blocks/#prefect-managedfiletransfer.blocks.RCloneConfigFileBlock"  # noqa
 

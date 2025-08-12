@@ -1,6 +1,6 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 from prefect.blocks.core import Block
-from pydantic import Field, SecretStr, model_validator
+from pydantic import Field, SecretStr
 
 from prefect_managedfiletransfer.constants import CONSTANTS
 
@@ -23,7 +23,7 @@ class ServerWithBasicAuthBlock(Block):
         ```
     """
 
-    _block_type_name = "server_with_basic_auth"
+    _block_type_name = "Server - Basic Auth [ManagedFileTransfer]"
     _logo_url = CONSTANTS.SERVER_LOGO_URL
     _documentation_url = "https://ImperialCollegeLondon.github.io/prefect-managedfiletransfer/blocks/#prefect-managedfiletransfer.blocks.ServerWithBasicAuthBlock"  # noqa
 
@@ -62,16 +62,3 @@ class ServerWithBasicAuthBlock(Block):
             and self.host
             and self.port > 0
         )
-
-    @model_validator(mode="before")
-    @classmethod
-    def check_valid(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Checks that either a connection string or account URL is provided, not both.
-        """
-
-        if not values.get("username") is not None or not values.get("password"):
-            raise ValueError("Must provide a username and password.")
-        if not values.get("host") or not values.get("port") or values["port"] <= 0:
-            raise ValueError("Must provide a valid host and port.")
-        return values
