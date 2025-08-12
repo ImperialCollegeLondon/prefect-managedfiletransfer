@@ -1,4 +1,4 @@
-# prefect-managedfiletransfer
+# Prefect Managed File Transfer
 
 <p align="center">
     <!--- Insert a cover image here -->
@@ -12,36 +12,38 @@
     <a href="https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer/pulse" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/m/ImperialCollegeLondon/prefect-managedfiletransfer?color=0052FF&labelColor=090422" /></a>
     <br>
-    <a href="https://prefect-community.slack.com" alt="Slack">
-        <img src="https://img.shields.io/badge/slack-join_community-red.svg?color=0052FF&labelColor=090422&logo=slack" /></a>
-    <a href="https://discourse.prefect.io/" alt="Discourse">
-        <img src="https://img.shields.io/badge/discourse-browse_forum-red.svg?color=0052FF&labelColor=090422&logo=discourse" /></a>
 </p>
 
-Visit the full docs [here](https://ImperialCollegeLondon.github.io/prefect-managedfiletransfer) to see additional examples and the API reference.
+Turn a prefect.io server into a managed file transfer solution. UI and Programatic creation of cron style jobs (aka Flows!) to upload and download files easily between servers. Support local, SFTP remotes plus any Cloud storage supported by rclone -  so thats aws, azure, google, sharepoint, and [many more](https://rclone.org/overview/) out of the box.
 
-Upload and download files easily between Local/SFTP/Cloud storage using rclone
+Using prefect for managed file transfer means retries, logging, multi node and [high availability](https://docs.prefect.io/v3/advanced/self-hosted) come as standard - turning prefect into a reliable enterprise ready file transfer solution. 
 
+This package is not the fastest solution to move files around, but it prioritises reliability and ease of use, making it an excellent choice for replacing both quick cron job copy scripts and enterprise managed file transfer applicances.
 
-<!--- ### Add a real-world example of how to use this Collection here
+Key features
 
-Offer some motivation on why this helps.
+- Copy and move files between almost any storage system easily.
+- Reliable file moving with checksumming, file size checking etc.
+- Smart and safe moving - settings to allow/block overwriting and to only copy files if they are new or changed.
+- Unzip/Untar compressed folders after downloading them.
+- Repath files as you move them.
+- Complex filtering and ordering of files - by path, age, size etc. Pattern matching with regular expressions.
+- Leverage Prefect.IO built in scheduling and orchestration capabilities:
+    - Transfer files on complex cron schedules, add notifications on success/failure - using the built in prefect functionality.
+    - Supports a highly available server architecture - database server + multi-node workers and front ends.
 
-After installing `prefect-managedfiletransfer` and [saving the credentials](#saving-credentials-to-block), you can easily use it within your flows to help you achieve the aforementioned benefits!
+Example use cases:
 
-```python
-from prefect import flow, get_run_logger
-```
-
---->
-
-## Resources
-
-For more tips on how to use tasks and flows in a Collection, check out [Using Collections](https://docs.prefect.io/collections/usage/)!
+- Once per day SSH into my database server and copy the latest *.bkup file to a central storage location.
+- Monitor a local network share directory for new files and automatically upload them to a cloud storage bucket.
+- Schedule a weekly job to synchronize files between two remote servers.
+- Move log files from a SSH available web server older than 30 days to a cold storage location.
+- Copy file yyyy-MM-dd.zip from a remote server, where yyyy-MM-dd matches todays date, to a local directory and then unzip it.
+- Download any file in an S3 bucket larger than 1GB and store it in a local directory.
 
 ### Installation
 
-Install `prefect-managedfiletransfer` with `pip`:
+Install `prefect-managedfiletransfer` with `pip`. (Requires an installation of Python 3.10+.)
 
 ```bash
 pip install prefect-managedfiletransfer
@@ -49,55 +51,66 @@ pip install prefect-managedfiletransfer
 uv add prefect-managedfiletransfer
 ```
 
-Requires an installation of Python 3.10+.
-
 We recommend using a Python virtual environment manager such as uv, pipenv, conda or virtualenv.
 
-These tasks are designed to work with Prefect 2.0. For more information about how to use Prefect, please refer to the [Prefect documentation](https://docs.prefect.io/).
-
-<!--- ### Saving credentials to block
-
-Note, to use the `load` method on Blocks, you must already have a block document [saved through code](https://docs.prefect.io/concepts/blocks/#saving-blocks) or [saved through the UI](https://docs.prefect.io/ui/blocks/).
-
-Below is a walkthrough on saving block documents through code.
-
-1. Head over to <SERVICE_URL>.
-2. Login to your <SERVICE> account.
-3. Click "+ Create new secret key".
-4. Copy the generated API key.
-5. Create a short script, replacing the placeholders (or do so in the UI).
-
-```python
-from prefect_managedfiletransfer import Block
-Block(api_key="API_KEY_PLACEHOLDER").save("BLOCK_NAME_PLACEHOLDER")
+In one terminal start a prefect server, (probably in a venv)
+```bash
+export PREFECT_LOGGING_LEVEL="INFO"
+export PREFECT_LOGGING_EXTRA_LOGGERS="prefect_managedfiletransfer"
+prefect server start
+# OR uv run prefect server start
 ```
 
-Congrats! You can now easily load the saved block, which holds your credentials:
 
-```python
-from prefect_managedfiletransfer import Block
-Block.load("BLOCK_NAME_PLACEHOLDER")
+Install the blocks using the prefect CLI
+
+```bash
+prefect block register -m prefect_managedfiletransfer
 ```
 
-!!! info "Registering blocks"
+Deploy the flows. The `transfer_files_flow` is the best place to start - it can be deployed using the following command:
 
-    Register blocks in this module to
-    [view and edit them](https://docs.prefect.io/ui/blocks/)
-    on Prefect Cloud:
+```bash
+# local worker
+prefect work-pool create default-pool --type process --overwrite
+prefect config set PREFECT_API_URL=http://127.0.0.1:4200/api
+uv run python prefect_managedfiletransfer/deploy.py
+export PREFECT_LOGGING_EXTRA_LOGGERS="prefect_managedfiletransfer"
+export PREFECT_LOGGING_LEVEL="INFO"
+# OR add everyting - export PREFECT_LOGGING_ROOT_LEVEL="INFO"
+prefect worker start --pool 'default-pool'
+# TODO
+```
 
-    ```bash
-    prefect block register -m prefect_managedfiletransfer
-    ```
+### Installation via docker
 
-A list of available blocks in `prefect-managedfiletransfer` and their setup instructions can be found [here](https://ImperialCollegeLondon.github.io/prefect-managedfiletransfer/blocks_catalog).
+```
+# run prefect server in a container port-forwarded to your local machine’s 4200 port:
+docker run -d -p 4200:4200 prefecthq/prefect:3-latest -- prefect server start --host 0.0.0.0
+```
 
---->
+
+### List of components
+
+Blocks
+- ServerWithBasicAuthBlock - A block for connecting to a server using basic authentication.
+- ServerWithPublicKeyAuthBlock - A block for connecting to a server using public key authentication.
+- RCloneConfigFileBlock - A block for managing RClone configuration files.
+
+Tasks
+- list_remote_files_task - A task for listing files in a remote directory.
+- download_file_task - A task for downloading a single file from a remote server.
+- upload_file_task - A task for uploading a single file to a remote server.
+- [TODO] delete_file_task
+
+Flows
+- transfer_files_flow - a fully featured flow for transferring files between different storage locations.
+- upload_file_flow - a flow for uploading a file to a remote server. Supports pattern matching by date
 
 ### Feedback
 
 If you encounter any bugs while using `prefect-managedfiletransfer`, feel free to open an issue in the [prefect-managedfiletransfer](https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer) repository.
 
-If you have any questions or issues while using `prefect-managedfiletransfer`, you can find help in either the [Prefect Discourse forum](https://discourse.prefect.io/) or the [Prefect Slack community](https://prefect.io/slack).
 
 Feel free to star or watch [`prefect-managedfiletransfer`](https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer) for updates too!
 
