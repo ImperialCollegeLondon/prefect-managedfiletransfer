@@ -19,8 +19,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache-dependency-glob: "pyproject.toml"
 
-      - run: |
-          uv run build
+      - run: uv build
 
       - name: Publish build artifacts
         uses: actions/upload-artifact@v4
