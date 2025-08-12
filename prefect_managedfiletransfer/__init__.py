@@ -1,5 +1,7 @@
-# blocks
+import logging
 from typing import Union
+
+# blocks
 from prefect_managedfiletransfer.ServerWithBasicAuthBlock import (
     ServerWithBasicAuthBlock,
 )  # noqa
@@ -31,6 +33,9 @@ from prefect_managedfiletransfer.RemoteConnectionType import RemoteConnectionTyp
 from prefect_managedfiletransfer.FileMatcher import FileMatcher  # noqa
 from prefect_managedfiletransfer.FileToFolderMapping import FileToFolderMapping  # noqa
 from prefect_managedfiletransfer.TransferType import TransferType  # noqa
+
+# by default emit logs at the INFO level
+logging.getLogger("prefect_managedfiletransfer").setLevel(logging.INFO)
 
 
 __all__ = [
