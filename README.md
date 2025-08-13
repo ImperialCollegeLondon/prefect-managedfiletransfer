@@ -102,29 +102,34 @@ Visit the server UI http://localhost:4200.
 1. Create 2 blocks, one source and one destination
 2. On the deployments page start a `transfer_files_flow`. Configure your flow run to copy/move files between the 2 blocks.
 
-### Installation via docker
+### Installation via docker - TODO
 
 ```bash
 # run prefect server in a container port-forwarded to your local machine’s 4200 port:
 docker run -d -p 4200:4200 prefecthq/prefect:3-latest -- prefect server start --host 0.0.0.0
 ```
 
-### List of components
+### Components
 
-Blocks
+**Flows**
+
+- transfer_files_flow - a fully featured flow for transferring files between different storage locations.
+- upload_file_flow - a flow for uploading a file to a remote server. Supports pattern matching by date
+
+**Blocks**
+
 - ServerWithBasicAuthBlock - A block for connecting to a server using basic authentication.
 - ServerWithPublicKeyAuthBlock - A block for connecting to a server using public key authentication.
 - RCloneConfigFileBlock - A block for managing RClone configuration files.
 
-Tasks
+**Tasks**
+
 - list_remote_files_task - A task for listing files in a remote directory.
 - download_file_task - A task for downloading a single file from a remote server.
 - upload_file_task - A task for uploading a single file to a remote server.
 - [TODO] delete_file_task
 
-Flows
-- transfer_files_flow - a fully featured flow for transferring files between different storage locations.
-- upload_file_flow - a flow for uploading a file to a remote server. Supports pattern matching by date
+![Screenshot of transfer files flow](./img/transfer_files_screengrab.png)
 
 ### Feedback
 
