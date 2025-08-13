@@ -18,11 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up uv and Python ${{ matrix.python-version }}
+      - name: Set up uv and Python
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.12
           cache-dependency-glob: "pyproject.toml"
 
       - run: uv build
