@@ -129,7 +129,7 @@ docker run -d -p 4200:4200 prefecthq/prefect:3-latest -- prefect server start --
 - upload_file_task - A task for uploading a single file to a remote server.
 - [TODO] delete_file_task
 
-![Screenshot of transfer files flow](./img/transfer_files_screengrab.png)
+![Screenshot of transfer files flow](docs/img/transfer_files_screengrab.png)
 
 ### Feedback
 
