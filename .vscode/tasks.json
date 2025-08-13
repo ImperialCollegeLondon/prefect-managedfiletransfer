@@ -1,0 +1,107 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "options": {
+        "env": {
+            "PREFECT_LOGGING_LEVEL": "INFO",
+            "PREFECT_LOGGING_EXTRA_LOGGERS": "prefect_managedfiletransfer",
+            "PREFECT_API_URL": "http://127.0.0.1:4200/api"
+        }
+    },
+    "tasks": [
+        {
+            "label": "Serve docs",
+            "type": "shell",
+            "command": "uv run mkdocs serve",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build docs",
+            "type": "shell",
+            "command": "uv run mkdocs build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Tests with coverage",
+            "type": "shell",
+            "command": "uv run coverage run -m pytest tests -vv && uv run coverage report",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build package",
+            "type": "shell",
+            "command": "uv build",
+            "problemMatcher": []
+        },
+        {
+            "label": "pre-commit",
+            "type": "shell",
+            "command": "uv run pre-commit run --show-diff-on-failure --color=always --all-files",
+            "problemMatcher": []
+        },
+        {
+            "label": "Start prefect server",
+            "type": "shell",
+            "command": "uv run prefect server start",
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": {
+                    "regexp": "_____"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^.*___*$",
+                    "endsPattern": "^.*Check out the dashboard.*$"
+                },
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+        },
+        {
+            "label": "Start prefect worker",
+            "type": "shell",
+            "command": "uv run prefect worker start --pool 'default-pool' --type process",
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": {
+                    "regexp": "_____"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^.*$",
+                    "endsPattern": "^.*Worker '.*' started!*$"
+                },
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "dependsOn": [
+                "Start prefect server"
+            ]
+        },
+        {
+            "label": "Deploy",
+            "type": "shell",
+            "command": "uv run python -m prefect_managedfiletransfer.deploy --local",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Start prefect worker"
+            ]
+        }
+    ]
+}
