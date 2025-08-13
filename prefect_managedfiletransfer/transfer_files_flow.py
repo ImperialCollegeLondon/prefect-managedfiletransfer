@@ -75,7 +75,7 @@ async def transfer_files_flow(
     check_for_space_overhead: int = 2 * 1024 * 1024 * 1024,  # 2GB overhead
     mode: TransferType = TransferType.Copy,
     reference_date: datetime | None = None,
-):
+) -> list:
     """
     Transfers files from a source to a destination based on the provided matchers and mapping.
     Args:
