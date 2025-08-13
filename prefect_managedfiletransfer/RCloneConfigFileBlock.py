@@ -49,3 +49,21 @@ class RCloneConfigFileBlock(Block):
         title="Config File Contents",
         description="The contents of the RClone configuration file.",
     )
+
+    @classmethod
+    def seed_value_for_example(cls):
+        """
+        Seeds the field, value, so the block can be loaded.
+        """
+        block = cls(
+            remote_name="my_sharepoint",
+            config_file_contents="""
+                                [my_sharepoint]
+                                type = onedrive
+                                token = {"access_token":"...","token_type":"Bearer","refresh_token":"...","expiry":"2000-00-00T00:00:00.000000000Z"}
+                                drive_id = b!-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                drive_type = documentLibrary
+                                """,
+        )
+
+        block.save("sample-block", overwrite=True)

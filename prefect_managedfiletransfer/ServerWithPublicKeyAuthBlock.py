@@ -99,3 +99,16 @@ class ServerWithPublicKeyAuthBlock(Block):
         The file is automatically deleted when the context is exited.
         """
         return _TemporaryKeyFile(self.private_key)
+
+    @classmethod
+    def seed_value_for_example(cls):
+        """
+        Seeds the field, value, so the block can be loaded.
+        """
+        block = cls(
+            username="example_user",
+            private_key=SecretStr("example_private_key"),
+            host="example.com",
+            port=22,
+        )
+        block.save("sample-block", overwrite=True)

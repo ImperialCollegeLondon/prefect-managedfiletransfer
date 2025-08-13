@@ -22,7 +22,10 @@ logging.getLogger("urllib3").setLevel(logging.INFO)
 logging.getLogger("httpcore.connection").setLevel(logging.INFO)
 logging.getLogger("httpcore.http11").setLevel(logging.INFO)
 logging.getLogger("asyncio:selector_events.py").setLevel(logging.INFO)
-
+logging.getLogger("graphviz").setLevel(logging.WARNING)
+logging.getLogger("websockets").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("asyncio").setLevel(logging.INFO)
 logger = logging.getLogger(__name__)
 
 
