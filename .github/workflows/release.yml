@@ -90,6 +90,7 @@ jobs:
     needs: [build-release]
     environment: "prod"
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: Download build artifacts
@@ -108,6 +109,7 @@ jobs:
     name: Build and publish docs
     needs: [build-release, publish-release]
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
 
     steps:
       - uses: actions/checkout@v4
