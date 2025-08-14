@@ -23,6 +23,7 @@ async def test_transfer_files_flow_can_copy_locally(
             )
         ],
         mode=TransferType.Copy,
+        check_for_space_overhead=1024 * 1024 * 10,
     )
 
     assert len(result) == 1
@@ -49,6 +50,7 @@ async def test_transfer_files_flow_can_move_locally(
             )
         ],
         mode=TransferType.Move,
+        check_for_space=False,
     )
 
     assert len(result) == 1
