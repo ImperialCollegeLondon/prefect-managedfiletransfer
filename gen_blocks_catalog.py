@@ -11,16 +11,25 @@ from prefect.blocks.core import Block
 from prefect.utilities.dispatch import get_registry_for_type
 from prefect.utilities.importtools import from_qualified_name, to_qualified_name
 
+from prefect_managedfiletransfer.deploy import register_blocks
+
 COLLECTION_SLUG = "prefect_managedfiletransfer"
 
 
 def find_module_blocks():
+    register_blocks()
+
     blocks = get_registry_for_type(Block)
     collection_blocks = [
         block
         for block in blocks.values()
         if to_qualified_name(block).startswith(COLLECTION_SLUG)
     ]
+
+    print("Collection blocks:")
+    for block in collection_blocks:
+        print(f" - {block.__name__}")
+
     module_blocks = {}
     for block in collection_blocks:
         block_name = block.__name__
