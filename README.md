@@ -74,7 +74,9 @@ export PREFECT_LOGGING_LEVEL="INFO"
 
 
 prefect worker start --pool 'default-pool' --type process
-# OR prefect worker start --pool 'default-pool' --type docker
+
+# OR add a worker with config to spawn containers that can talk to the server API:
+PREFECT_API_URL=http://host.docker.internal:4200/api uv run prefect worker start --pool 'default-pool' --type=docker  
 
 ```
     

@@ -14,9 +14,9 @@ def deploy_flows(
     work_pool_name: str = "default-pool",
     tags: list[str] = ["managed-file-transfer"],
     local: bool = True,
-    docker_image: str = "ghcr.io/imperialcollegelondon/prefect-managedfiletransfer",
-    docker_tag: str = "local-dev",  # or latest?
-    build: bool = True,
+    docker_image: str = "managedfiletransfer/prefect-managedfiletransfer",
+    docker_tag: str = "main",  # or local-dev, or latest?
+    build: bool = False,
     push: bool = False,
     job_variables: dict[str, str] = None,
 ):
@@ -31,8 +31,8 @@ def deploy_flows(
 
     if local:
         build = False
-    else:
-        build = True
+        push = False
+    if build:
         job_variables = {**job_variables, "pip_packages": _get_dependencies()}
 
     for deployable in mft_flow:
