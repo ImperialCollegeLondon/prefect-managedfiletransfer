@@ -11,8 +11,10 @@
         <link rel="canonical" href="https://ImperialCollegeLondon.github.io/prefect-managedfiletransfer/flows/">
       
       
-        <link rel="prev" href="../tasks/">
+        <link rel="prev" href="../blocks_catalog/">
       
+      
+        <link rel="next" href="../tasks/">
       
       
       <link rel="icon" href="../img/favicon.ico">
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#prefect_managedfiletransfer.flows" class="md-skip">
+        <a href="#prefect_managedfiletransfer.transfer_files_flow" class="md-skip">
           Skip to content
         </a>
       
@@ -307,28 +309,6 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples_catalog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Examples Catalog
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -342,10 +322,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -358,35 +338,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             API Reference
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tasks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Tasks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
             
               
                 
@@ -445,7 +402,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prefect_managedfiletransfer.flows-classes" class="md-nav__link">
+  <a href="#prefect_managedfiletransfer.transfer_files_flow-classes" class="md-nav__link">
     <span class="md-ellipsis">
       Classes
     </span>
@@ -454,7 +411,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#prefect_managedfiletransfer.flows-functions" class="md-nav__link">
+  <a href="#prefect_managedfiletransfer.transfer_files_flow-functions" class="md-nav__link">
     <span class="md-ellipsis">
       Functions
     </span>
@@ -464,9 +421,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#prefect_managedfiletransfer.flows.hello_and_goodbye" class="md-nav__link">
+  <a href="#prefect_managedfiletransfer.transfer_files_flow.transfer_files_flow" class="md-nav__link">
     <span class="md-ellipsis">
-      hello_and_goodbye
+      transfer_files_flow
     </span>
   </a>
   
@@ -481,6 +438,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tasks
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -520,7 +500,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prefect_managedfiletransfer.flows-classes" class="md-nav__link">
+  <a href="#prefect_managedfiletransfer.transfer_files_flow-classes" class="md-nav__link">
     <span class="md-ellipsis">
       Classes
     </span>
@@ -529,7 +509,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#prefect_managedfiletransfer.flows-functions" class="md-nav__link">
+  <a href="#prefect_managedfiletransfer.transfer_files_flow-functions" class="md-nav__link">
     <span class="md-ellipsis">
       Functions
     </span>
@@ -539,9 +519,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#prefect_managedfiletransfer.flows.hello_and_goodbye" class="md-nav__link">
+  <a href="#prefect_managedfiletransfer.transfer_files_flow.transfer_files_flow" class="md-nav__link">
     <span class="md-ellipsis">
-      hello_and_goodbye
+      transfer_files_flow
     </span>
   </a>
   
@@ -575,15 +555,13 @@
 
 
 
-<h1 id="prefect_managedfiletransfer.flows" class="doc doc-heading">
-            <code>prefect_managedfiletransfer.flows</code>
+<h1 id="prefect_managedfiletransfer.transfer_files_flow" class="doc doc-heading">
+            <code>prefect_managedfiletransfer.transfer_files_flow</code>
 
 
 </h1>
 
     <div class="doc doc-contents first">
-
-        <p>This is an example flows module</p>
 
 
 
@@ -600,50 +578,781 @@
 
 
 
-<h2 id="prefect_managedfiletransfer.flows-classes">Classes</h2>
-<h2 id="prefect_managedfiletransfer.flows-functions">Functions</h2>
+<h2 id="prefect_managedfiletransfer.transfer_files_flow-classes">Classes</h2>
+<h2 id="prefect_managedfiletransfer.transfer_files_flow-functions">Functions</h2>
 
 <div class="doc doc-object doc-function">
 
 
-<h3 id="prefect_managedfiletransfer.flows.hello_and_goodbye" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">hello_and_goodbye</span></code>
+<h3 id="prefect_managedfiletransfer.transfer_files_flow.transfer_files_flow" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">transfer_files_flow</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Sample flow that says hello and goodbye!</p>
+        <p>Transfers files from a source to a destination based on the provided matchers and mapping.
+Args:
+    source_block: The source block to transfer files from.
+    destination_block: The destination block to transfer files to.
+    source_file_matchers: List of file matcheing patterns to find and filter files in the source.
+    path_mapping: List of file-to-folder mappings for transferring files.
+    destination_folder: The path of the folder in destination_block where files will be transferred.
+    update_only_if_newer_mode: If true, skip files that are newer on the destination.
+    overwrite: If true, overwrite existing files in the destination.
+    check_for_space: If true, check if there is enough space on the destination before transferring.
+    check_for_space_overhead: Amount of extra space to reserve on the destination (in bytes).
+    mode: Copy or Move transfer mode.
+    reference_date: defaults to now() in UTC - used to filter files based on modification time, and for pattern replacement in file names
+Returns:
+    A list of the Paths of transferred files.</p>
 
 
             <details class="quote">
-              <summary>Source code in <code>prefect_managedfiletransfer/flows.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">hello_and_goodbye</span><span class="p">():</span>
+              <summary>Source code in <code>prefect_managedfiletransfer/transfer_files_flow.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">FLOW_NAMES</span><span class="o">.</span><span class="n">TRANSFER_FILES</span><span class="p">,</span>
+    <span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">flow_run_name</span><span class="o">=</span><span class="n">_generate_flow_run_name</span><span class="p">,</span>
+    <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span>  <span class="c1"># retry every 20 minutes</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>  <span class="c1"># timeout after 30 minutes</span>
+<span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">transfer_files_flow</span><span class="p">(</span>
+    <span class="n">source_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
+    <span class="n">destination_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
+    <span class="n">source_file_matchers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileMatcher</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">FileMatcher</span><span class="p">()],</span>
+    <span class="n">path_mapping</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileToFolderMapping</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="n">destination_folder</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
+    <span class="n">update_only_if_newer_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">check_for_space</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">check_for_space_overhead</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>  <span class="c1"># 2GB overhead</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">TransferType</span> <span class="o">=</span> <span class="n">TransferType</span><span class="o">.</span><span class="n">Copy</span><span class="p">,</span>
+    <span class="n">reference_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Sample flow that says hello and goodbye!</span>
+<span class="sd">    Transfers files from a source to a destination based on the provided matchers and mapping.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        source_block: The source block to transfer files from.</span>
+<span class="sd">        destination_block: The destination block to transfer files to.</span>
+<span class="sd">        source_file_matchers: List of file matcheing patterns to find and filter files in the source.</span>
+<span class="sd">        path_mapping: List of file-to-folder mappings for transferring files.</span>
+<span class="sd">        destination_folder: The path of the folder in destination_block where files will be transferred.</span>
+<span class="sd">        update_only_if_newer_mode: If true, skip files that are newer on the destination.</span>
+<span class="sd">        overwrite: If true, overwrite existing files in the destination.</span>
+<span class="sd">        check_for_space: If true, check if there is enough space on the destination before transferring.</span>
+<span class="sd">        check_for_space_overhead: Amount of extra space to reserve on the destination (in bytes).</span>
+<span class="sd">        mode: Copy or Move transfer mode.</span>
+<span class="sd">        reference_date: defaults to now() in UTC - used to filter files based on modification time, and for pattern replacement in file names</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        A list of the Paths of transferred files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ServerWithBasicAuthBlock</span><span class="o">.</span><span class="n">seed_value_for_example</span><span class="p">()</span>
-    <span class="n">block</span> <span class="o">=</span> <span class="n">ServerWithBasicAuthBlock</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;sample-block&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">source_file_matchers</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No source file matchers provided&quot;</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="n">hello_prefect_managedfiletransfer</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The block&#39;s contents: </span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2"> as </span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">goodbye_prefect_managedfiletransfer</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">reference_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">reference_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="s2">&quot;Done&quot;</span>
+    <span class="c1"># cannot both be local file systems</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="n">LocalFileSystem</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+        <span class="n">destination_block</span><span class="p">,</span> <span class="n">LocalFileSystem</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot transfer files between two remote file systems. One must be local.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">source_type</span> <span class="o">=</span> <span class="n">map_block_to_remote_type</span><span class="p">(</span><span class="n">source_block</span><span class="p">)</span>
+    <span class="n">destination_type</span> <span class="o">=</span> <span class="n">map_block_to_remote_type</span><span class="p">(</span><span class="n">destination_block</span><span class="p">)</span>
+    <span class="n">rclone_source_config</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">RCloneConfigSavedInPrefect</span><span class="p">(</span><span class="n">source_block</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="n">RCloneConfigFileBlock</span><span class="p">)</span>
+        <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="n">rclone_destination_config</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">RCloneConfigSavedInPrefect</span><span class="p">(</span><span class="n">destination_block</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">RCloneConfigFileBlock</span><span class="p">)</span>
+        <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+
+    <span class="n">source_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RemoteAsset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">matcher</span> <span class="ow">in</span> <span class="n">source_file_matchers</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="k">await</span> <span class="n">list_remote_files_task</span><span class="p">(</span>
+            <span class="n">source_block</span><span class="p">,</span>
+            <span class="n">source_type</span><span class="p">,</span>
+            <span class="n">matcher</span><span class="p">,</span>
+            <span class="n">rclone_source_config</span><span class="p">,</span>
+            <span class="n">reference_date</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">source_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+    <span class="n">basepath_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">destination_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">&quot;basepath&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+
+    <span class="n">resolved_destination_with_basepath</span> <span class="o">=</span> <span class="n">PathUtil</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span>
+        <span class="n">destination_type</span><span class="p">,</span> <span class="n">basepath_str</span><span class="p">,</span> <span class="n">destination_folder</span>
+    <span class="p">)</span>
+
+    <span class="n">source_destination_pairs</span> <span class="o">=</span> <span class="n">FileToFolderMapping</span><span class="o">.</span><span class="n">apply_mappings</span><span class="p">(</span>
+        <span class="n">path_mapping</span><span class="p">,</span> <span class="n">source_files</span><span class="p">,</span> <span class="n">resolved_destination_with_basepath</span>
+    <span class="p">)</span>
+
+    <span class="n">transferred</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">remote_asset</span><span class="p">,</span> <span class="n">target_file_path</span> <span class="ow">in</span> <span class="n">source_destination_pairs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">destination_type</span> <span class="o">==</span> <span class="n">RemoteConnectionType</span><span class="o">.</span><span class="n">LOCAL</span><span class="p">:</span>
+            <span class="n">downloaded_file</span> <span class="o">=</span> <span class="k">await</span> <span class="n">download_file_task</span><span class="p">(</span>
+                <span class="n">source_block</span><span class="p">,</span>
+                <span class="n">source_type</span><span class="p">,</span>
+                <span class="n">remote_asset</span><span class="p">,</span>
+                <span class="n">target_file_path</span><span class="p">,</span>
+                <span class="n">update_only_if_newer_mode</span><span class="p">,</span>
+                <span class="n">overwrite</span><span class="p">,</span>
+                <span class="n">mode</span><span class="p">,</span>
+                <span class="n">rclone_source_config</span><span class="p">,</span>
+                <span class="n">check_for_space</span><span class="p">,</span>
+                <span class="n">check_for_space_overhead</span><span class="p">,</span>
+                <span class="n">reference_date</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">transferred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">downloaded_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">upload_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_file_task</span><span class="p">(</span>
+                <span class="n">remote_asset</span><span class="p">,</span>
+                <span class="n">destination_block</span><span class="p">,</span>
+                <span class="n">destination_type</span><span class="p">,</span>
+                <span class="n">target_file_path</span><span class="p">,</span>
+                <span class="n">update_only_if_newer_mode</span><span class="p">,</span>
+                <span class="n">overwrite</span><span class="p">,</span>
+                <span class="n">mode</span><span class="p">,</span>
+                <span class="n">rclone_config</span><span class="o">=</span><span class="n">rclone_destination_config</span><span class="p">,</span>
+                <span class="n">check_for_space</span><span class="o">=</span><span class="n">check_for_space</span><span class="p">,</span>
+                <span class="n">check_for_space_overhead</span><span class="o">=</span><span class="n">check_for_space_overhead</span><span class="p">,</span>
+                <span class="n">reference_date</span><span class="o">=</span><span class="n">reference_date</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">transferred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upload_result</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transfer completed. </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transferred</span><span class="p">)</span><span class="si">}</span><span class="s2"> files processed&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">transferred</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h1 id="prefect_managedfiletransfer.upload_file_flow" class="doc doc-heading">
+            <code>prefect_managedfiletransfer.upload_file_flow</code>
+
+
+</h1>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+<h2 id="prefect_managedfiletransfer.upload_file_flow-classes">Classes</h2>
+<h2 id="prefect_managedfiletransfer.upload_file_flow-functions">Functions</h2>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="prefect_managedfiletransfer.upload_file_flow.upload_file_flow" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">upload_file_flow</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Publish a single file to a destination, e.g. upload an image to a website or copy a file to a local shared public folder</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>source_folder</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The folder where the file to upload is located.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pattern_to_upload</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The pattern of the file to upload, e.g. "*.jpg".</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>destination_file</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The destination file path where the file will be uploaded.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>destination_block_or_blockname</code>
+            </td>
+            <td>
+                  <code><span title="prefect_managedfiletransfer.ServerWithBasicAuthBlock.ServerWithBasicAuthBlock">ServerWithBasicAuthBlock</span> | <span title="prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock.ServerWithPublicKeyAuthBlock">ServerWithPublicKeyAuthBlock</span> | <span title="prefect.filesystems.LocalFileSystem">LocalFileSystem</span> | <span title="prefect_managedfiletransfer.RCloneConfigFileBlock.RCloneConfigFileBlock">RCloneConfigFileBlock</span> | <span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The destination block or block name where the file will be uploaded.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>update_only_if_newer_mode</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If true, skip files that are newer on the destination.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>mode</code>
+            </td>
+            <td>
+                  <code><span title="prefect_managedfiletransfer.TransferType.TransferType">TransferType</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The transfer mode to use, e.g. Copy or Move.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="prefect_managedfiletransfer.TransferType.TransferType.Copy">Copy</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>overwrite</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If true, overwrite the file if it already exists at the destination.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        
+
+
+            <details class="quote">
+              <summary>Source code in <code>prefect_managedfiletransfer/upload_file_flow.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">FLOW_NAMES</span><span class="o">.</span><span class="n">UPLOAD_FILE</span><span class="p">,</span>
+    <span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">flow_run_name</span><span class="o">=</span><span class="n">generate_flow_run_name</span><span class="p">,</span>
+    <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span>  <span class="c1"># retry every 20 minutes</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>  <span class="c1"># timeout after 30 minutes</span>
+<span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_file_flow</span><span class="p">(</span>
+    <span class="n">source_folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">pattern_to_upload</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">destination_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">destination_block_or_blockname</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+        <span class="o">|</span> <span class="nb">str</span>
+    <span class="p">),</span>
+    <span class="n">update_only_if_newer_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># if true skip files that are newer on the destination</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">TransferType</span> <span class="o">=</span> <span class="n">TransferType</span><span class="o">.</span><span class="n">Copy</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Publish a single file to a destination, e.g. upload an image to a website or copy a file to a local shared public folder</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source_folder (Path): The folder where the file to upload is located.</span>
+<span class="sd">        pattern_to_upload (str): The pattern of the file to upload, e.g. &quot;*.jpg&quot;.</span>
+<span class="sd">        destination_file (Path): The destination file path where the file will be uploaded.</span>
+<span class="sd">        destination_block_or_blockname (ServerWithBasicAuthBlock | ServerWithPublicKeyAuthBlock | LocalFileSystem | RCloneConfigFileBlock | str): The destination block or block name where the file will be uploaded.</span>
+<span class="sd">        update_only_if_newer_mode (bool): If true, skip files that are newer on the destination.</span>
+<span class="sd">        mode (TransferType): The transfer mode to use, e.g. Copy or Move.</span>
+<span class="sd">        overwrite (bool): If true, overwrite the file if it already exists at the destination.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        None: The function does not return anything, it raises an exception if the upload fails.</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the destination block or blockname is missing, or if the upload fails.</span>
+<span class="sd">        TypeError: If the destination block is of an unsupported type.</span>
+<span class="sd">        ImportError: If the required libraries for SFTP or RClone are not installed.</span>
+<span class="sd">        FileNotFoundError: If the source folder or file to upload does not exist.</span>
+<span class="sd">        ConnectionError: If the connection to the SFTP server fails.</span>
+<span class="sd">        FileExistsError: If the destination file already exists and overwrite is False.</span>
+<span class="sd">        RuntimeError: if the upload occured but the sizes do not match, indicating a potential issue with the upload process.</span>
+<span class="sd">        RuntimeError: if the upload fails with a non-zero exit code.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">get_run_logger</span><span class="p">()</span>
+
+    <span class="n">sftp_details</span><span class="p">:</span> <span class="n">ServerWithBasicAuthBlock</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sftp_details_public_key</span><span class="p">:</span> <span class="n">ServerWithPublicKeyAuthBlock</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">local_details</span><span class="p">:</span> <span class="n">LocalFileSystem</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">destination_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Destination block or blockname is missing&quot;</span><span class="p">)</span>
+
+    <span class="n">destination_block</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block_or_blockname</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">destination_block</span> <span class="o">=</span> <span class="k">await</span> <span class="n">try_fetch_upload_destination</span><span class="p">(</span>
+            <span class="n">destination_block_or_blockname</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">destination_block</span> <span class="o">=</span> <span class="n">destination_block_or_blockname</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">ServerWithBasicAuthBlock</span><span class="p">):</span>
+        <span class="n">sftp_details</span> <span class="o">=</span> <span class="n">destination_block</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sftp_details</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;One or more SFTP server details are missing&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">sftp_details</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
+            <span class="n">source_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
+            <span class="n">pattern_to_upload</span><span class="o">=</span><span class="n">pattern_to_upload</span><span class="p">,</span>
+            <span class="n">destination_file</span><span class="o">=</span><span class="n">destination_file</span><span class="p">,</span>
+            <span class="n">destination_type</span><span class="o">=</span><span class="n">RemoteConnectionType</span><span class="o">.</span><span class="n">SFTP</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">sftp_details</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">sftp_details</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">sftp_details</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">sftp_details</span><span class="o">.</span><span class="n">password</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">(),</span>
+            <span class="n">update_only_if_newer_mode</span><span class="o">=</span><span class="n">update_only_if_newer_mode</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">ServerWithPublicKeyAuthBlock</span><span class="p">):</span>
+        <span class="n">sftp_details_public_key</span> <span class="o">=</span> <span class="n">destination_block</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;One or more SFTP server details are missing&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2"> with pub/private keys&quot;</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">get_temp_key_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_key_file</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
+                <span class="n">source_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
+                <span class="n">pattern_to_upload</span><span class="o">=</span><span class="n">pattern_to_upload</span><span class="p">,</span>
+                <span class="n">destination_file</span><span class="o">=</span><span class="n">destination_file</span><span class="p">,</span>
+                <span class="n">destination_type</span><span class="o">=</span><span class="n">RemoteConnectionType</span><span class="o">.</span><span class="n">SFTP</span><span class="p">,</span>
+                <span class="n">host</span><span class="o">=</span><span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                <span class="n">private_key_path</span><span class="o">=</span><span class="n">temp_key_file</span><span class="o">.</span><span class="n">get_path</span><span class="p">(),</span>
+                <span class="n">update_only_if_newer_mode</span><span class="o">=</span><span class="n">update_only_if_newer_mode</span><span class="p">,</span>
+                <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">LocalFileSystem</span><span class="p">):</span>
+        <span class="n">local_details</span> <span class="o">=</span> <span class="n">destination_block</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">local_details</span><span class="o">.</span><span class="n">basepath</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;LocalFileSystem.basepath details are missing&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using basepath from local filesystem: </span><span class="si">{</span><span class="n">local_details</span><span class="o">.</span><span class="n">basepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">destination_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">local_details</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span> <span class="o">/</span> <span class="n">destination_file</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uploading to local filesystem: </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
+            <span class="n">source_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
+            <span class="n">pattern_to_upload</span><span class="o">=</span><span class="n">pattern_to_upload</span><span class="p">,</span>
+            <span class="n">destination_file</span><span class="o">=</span><span class="n">destination_file</span><span class="p">,</span>
+            <span class="n">destination_type</span><span class="o">=</span><span class="n">RemoteConnectionType</span><span class="o">.</span><span class="n">LOCAL</span><span class="p">,</span>
+            <span class="n">update_only_if_newer_mode</span><span class="o">=</span><span class="n">update_only_if_newer_mode</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">RCloneConfigFileBlock</span><span class="p">):</span>
+        <span class="n">rclone_details_prefect_block</span><span class="p">:</span> <span class="n">RCloneConfigFileBlock</span> <span class="o">=</span> <span class="n">destination_block</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> using rclone block for remote </span><span class="si">{</span><span class="n">rclone_details_prefect_block</span><span class="o">.</span><span class="n">remote_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
+            <span class="n">source_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
+            <span class="n">pattern_to_upload</span><span class="o">=</span><span class="n">pattern_to_upload</span><span class="p">,</span>
+            <span class="n">destination_file</span><span class="o">=</span><span class="n">destination_file</span><span class="p">,</span>
+            <span class="n">destination_type</span><span class="o">=</span><span class="n">RemoteConnectionType</span><span class="o">.</span><span class="n">RCLONE</span><span class="p">,</span>
+            <span class="n">rclone_config</span><span class="o">=</span><span class="n">RCloneConfigSavedInPrefect</span><span class="p">(</span><span class="n">rclone_details_prefect_block</span><span class="p">),</span>
+            <span class="n">update_only_if_newer_mode</span><span class="o">=</span><span class="n">update_only_if_newer_mode</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Destination details are missing&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Failed to upload </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2">. Exit code </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

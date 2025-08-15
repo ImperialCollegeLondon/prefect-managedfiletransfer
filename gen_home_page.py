@@ -16,6 +16,10 @@ with open(readme_path, "r") as readme:
         for line in readme:
             if line.startswith("Visit the full docs [here]("):
                 continue  # prevent linking to itself
+
+            if "docs/img/" in line:
+                line = line.replace("docs/img/", "img/")
+
             generated_file.write(line)
 
     mkdocs_gen_files.set_edit_path(Path(docs_index_path), readme_path)

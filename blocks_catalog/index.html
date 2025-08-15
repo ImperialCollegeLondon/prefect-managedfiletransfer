@@ -14,7 +14,7 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../examples_catalog/">
+        <link rel="next" href="../flows/">
       
       
       <link rel="icon" href="../img/favicon.ico">
@@ -76,11 +76,6 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
-      
-        
-        <a href="#serverwithbasicauthblock-module" class="md-skip">
-          Skip to content
-        </a>
       
     </div>
     <div data-md-component="announce">
@@ -297,19 +292,6 @@
       
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Blocks Catalog
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -322,72 +304,6 @@
 
       </a>
       
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#serverwithbasicauthblock-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Serverwithbasicauthblock Module
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#serverwithpublickeyauthblock-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Serverwithpublickeyauthblock Module
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rcloneconfigfileblock-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rcloneconfigfileblock Module
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples_catalog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Examples Catalog
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -407,10 +323,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -423,8 +339,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             API Reference
           </label>
@@ -437,12 +353,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/" class="md-nav__link">
+      <a href="../flows/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Tasks
+    Flows
     
   </span>
   
@@ -460,12 +376,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../flows/" class="md-nav__link">
+      <a href="../tasks/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Flows
+    Tasks
     
   </span>
   
@@ -501,41 +417,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#serverwithbasicauthblock-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Serverwithbasicauthblock Module
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#serverwithpublickeyauthblock-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Serverwithpublickeyauthblock Module
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rcloneconfigfileblock-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rcloneconfigfileblock Module
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -552,70 +433,7 @@
 
   <h1>Blocks Catalog</h1>
 
-<p>Below is a list of Blocks available for registration in
-<code>prefect-managedfiletransfer</code>.</p>
-<p>To register blocks in this module to
-<a href="https://docs.prefect.io/ui/blocks/">view and edit them</a>
-on Prefect Cloud, first <a href="https://ImperialCollegeLondon.github.io/prefect-managedfiletransfer/#installation">install the required packages</a>,
-then
-<div class="highlight"><pre><span></span><code>prefect<span class="w"> </span>block<span class="w"> </span>register<span class="w"> </span>-m<span class="w"> </span>prefect_managedfiletransfer
-</code></pre></div>
-Note, to use the <code>load</code> method on Blocks, you must already have a block document <a href="https://docs.prefect.io/concepts/blocks/#saving-blocks">saved through code</a> or <a href="https://docs.prefect.io/ui/blocks/">saved through the UI</a>.</p>
-<h2 id="serverwithbasicauthblock-module">[Serverwithbasicauthblock Module][prefect_managedfiletransfer.ServerWithBasicAuthBlock]</h2>
-<p>[ServerWithBasicAuthBlock][prefect_managedfiletransfer.ServerWithBasicAuthBlock.ServerWithBasicAuthBlock]</p>
-<p>A connection to a remote server with basic authentication.</p>
-<p>To load the ServerWithBasicAuthBlock:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">prefect</span><span class="w"> </span><span class="kn">import</span> <span class="n">flow</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">prefect_managedfiletransfer.ServerWithBasicAuthBlock</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerWithBasicAuthBlock</span>
 
-<span class="nd">@flow</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">my_flow</span><span class="p">():</span>
-    <span class="n">my_block</span> <span class="o">=</span> <span class="n">ServerWithBasicAuthBlock</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
-
-<span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div>
-For additional examples, check out the <a href="../examples_catalog/#ServerWithBasicAuthBlock-module">Serverwithbasicauthblock Module</a> under Examples Catalog.</p>
-<h2 id="serverwithpublickeyauthblock-module">[Serverwithpublickeyauthblock Module][prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock]</h2>
-<p>[ServerWithPublicKeyAuthBlock][prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock.ServerWithPublicKeyAuthBlock]</p>
-<p>Block for storing SFTP server details with public key authentication.
-Attributes:
-    username: The username for SFTP authentication.
-    private_key: The private key for SFTP authentication, stored as a SecretStr.
-    host: The hostname or IP address of the SFTP server.
-    port: The port number for SFTP, default is 22.</p>
-<p>To load the ServerWithPublicKeyAuthBlock:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">prefect</span><span class="w"> </span><span class="kn">import</span> <span class="n">flow</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
-
-<span class="nd">@flow</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">my_flow</span><span class="p">():</span>
-    <span class="n">my_block</span> <span class="o">=</span> <span class="n">ServerWithPublicKeyAuthBlock</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
-
-<span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div>
-For additional examples, check out the <a href="../examples_catalog/#ServerWithPublicKeyAuthBlock-module">Serverwithpublickeyauthblock Module</a> under Examples Catalog.</p>
-<h2 id="rcloneconfigfileblock-module">[Rcloneconfigfileblock Module][prefect_managedfiletransfer.RCloneConfigFileBlock]</h2>
-<p>[RCloneConfigFileBlock][prefect_managedfiletransfer.RCloneConfigFileBlock.RCloneConfigFileBlock]</p>
-<p>Block for storing RClone configuration file contents.
-This block is used to store the contents of an RClone configuration file, which can be used to configure RClone for file transfers.
-The block is updated with tokends when they are refreshed, allowing for dynamic updates to the RClone configuration.</p>
-<p>Generate a config locally with <code>rclone config create my_sharepoint onedrive</code> like below, then save the contents in a block with remote_name=my_sharepoint,config_file_contents=
-[my_sharepoint]
-type = onedrive
-token = {"access_token":"...","token_type":"Bearer","refresh_token":"...","expiry":"2000-00-00T00:00:00.000000000Z"}
-drive_id = b!-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-drive_type = documentLibrary.</p>
-<p>To load the RCloneConfigFileBlock:
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">prefect</span><span class="w"> </span><span class="kn">import</span> <span class="n">flow</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">prefect_managedfiletransfer.RCloneConfigFileBlock</span><span class="w"> </span><span class="kn">import</span> <span class="n">RCloneConfigFileBlock</span>
-
-<span class="nd">@flow</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">my_flow</span><span class="p">():</span>
-    <span class="n">my_block</span> <span class="o">=</span> <span class="n">RCloneConfigFileBlock</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;MY_BLOCK_NAME&quot;</span><span class="p">)</span>
-
-<span class="n">my_flow</span><span class="p">()</span>
-</code></pre></div>
-For additional examples, check out the <a href="../examples_catalog/#RCloneConfigFileBlock-module">Rcloneconfigfileblock Module</a> under Examples Catalog.</p>
 
 
 

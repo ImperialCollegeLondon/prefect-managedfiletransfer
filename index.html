@@ -325,18 +325,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation-via-docker" class="md-nav__link">
+  <a href="#installation-via-docker-todo" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation via docker
+      Installation via docker - TODO
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#list-of-components" class="md-nav__link">
+  <a href="#components" class="md-nav__link">
     <span class="md-ellipsis">
-      List of components
+      Components
     </span>
   </a>
   
@@ -396,28 +396,6 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="examples_catalog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Examples Catalog
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
     
     
     
@@ -427,10 +405,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -443,35 +421,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             API Reference
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="tasks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Tasks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
             
               
                 
@@ -486,6 +441,29 @@
   
   <span class="md-ellipsis">
     Flows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tasks
     
   </span>
   
@@ -539,18 +517,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation-via-docker" class="md-nav__link">
+  <a href="#installation-via-docker-todo" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation via docker
+      Installation via docker - TODO
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#list-of-components" class="md-nav__link">
+  <a href="#components" class="md-nav__link">
     <span class="md-ellipsis">
-      List of components
+      Components
     </span>
   </a>
   
@@ -657,7 +635,9 @@ prefect<span class="w"> </span>server<span class="w"> </span>start
 
 
 prefect<span class="w"> </span>worker<span class="w"> </span>start<span class="w"> </span>--pool<span class="w"> </span><span class="s1">&#39;default-pool&#39;</span><span class="w"> </span>--type<span class="w"> </span>process
-<span class="c1"># OR prefect worker start --pool &#39;default-pool&#39; --type docker</span>
+
+<span class="c1"># OR add a worker with config to spawn containers that can talk to the server API:</span>
+<span class="nv">PREFECT_API_URL</span><span class="o">=</span>http://host.docker.internal:4200/api<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>prefect<span class="w"> </span>worker<span class="w"> </span>start<span class="w"> </span>--pool<span class="w"> </span><span class="s1">&#39;default-pool&#39;</span><span class="w"> </span>--type<span class="o">=</span>docker<span class="w">  </span>
 </code></pre></div>
 <p>Install the blocks using the prefect CLI</p>
 <div class="highlight"><pre><span></span><code>prefect<span class="w"> </span>block<span class="w"> </span>register<span class="w"> </span>-m<span class="w"> </span>prefect_managedfiletransfer
@@ -676,23 +656,30 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <p>Visit the server UI http://localhost:4200.
 1. Create 2 blocks, one source and one destination
 2. On the deployments page start a <code>transfer_files_flow</code>. Configure your flow run to copy/move files between the 2 blocks.</p>
-<h3 id="installation-via-docker">Installation via docker</h3>
+<h3 id="installation-via-docker-todo">Installation via docker - TODO</h3>
 <div class="highlight"><pre><span></span><code><span class="c1"># run prefect server in a container port-forwarded to your local machine’s 4200 port:</span>
 docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-p<span class="w"> </span><span class="m">4200</span>:4200<span class="w"> </span>prefecthq/prefect:3-latest<span class="w"> </span>--<span class="w"> </span>prefect<span class="w"> </span>server<span class="w"> </span>start<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0
 </code></pre></div>
-<h3 id="list-of-components">List of components</h3>
-<p>Blocks
-- ServerWithBasicAuthBlock - A block for connecting to a server using basic authentication.
-- ServerWithPublicKeyAuthBlock - A block for connecting to a server using public key authentication.
-- RCloneConfigFileBlock - A block for managing RClone configuration files.</p>
-<p>Tasks
-- list_remote_files_task - A task for listing files in a remote directory.
-- download_file_task - A task for downloading a single file from a remote server.
-- upload_file_task - A task for uploading a single file to a remote server.
-- [TODO] delete_file_task</p>
-<p>Flows
-- transfer_files_flow - a fully featured flow for transferring files between different storage locations.
-- upload_file_flow - a flow for uploading a file to a remote server. Supports pattern matching by date</p>
+<h3 id="components">Components</h3>
+<p><strong>Flows</strong></p>
+<ul>
+<li>transfer_files_flow - a fully featured flow for transferring files between different storage locations.</li>
+<li>upload_file_flow - a flow for uploading a file to a remote server. Supports pattern matching by date</li>
+</ul>
+<p><strong>Blocks</strong></p>
+<ul>
+<li>ServerWithBasicAuthBlock - A block for connecting to a server using basic authentication.</li>
+<li>ServerWithPublicKeyAuthBlock - A block for connecting to a server using public key authentication.</li>
+<li>RCloneConfigFileBlock - A block for managing RClone configuration files.</li>
+</ul>
+<p><strong>Tasks</strong></p>
+<ul>
+<li>list_remote_files_task - A task for listing files in a remote directory.</li>
+<li>download_file_task - A task for downloading a single file from a remote server.</li>
+<li>upload_file_task - A task for uploading a single file to a remote server.</li>
+<li>[TODO] delete_file_task</li>
+</ul>
+<p><img alt="Screenshot of transfer files flow" src="img/transfer_files_screengrab.png" /></p>
 <h3 id="feedback">Feedback</h3>
 <p>If you encounter any bugs while using <code>prefect-managedfiletransfer</code>, feel free to open an issue in the <a href="https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer">prefect-managedfiletransfer</a> repository.</p>
 <p>Feel free to star or watch <a href="https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer"><code>prefect-managedfiletransfer</code></a> for updates too!</p>
