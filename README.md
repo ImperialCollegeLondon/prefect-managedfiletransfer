@@ -42,6 +42,8 @@ Example use cases:
 - Copy file yyyy-MM-dd.zip from a remote server, where yyyy-MM-dd matches todays date, to a local directory and then unzip it.
 - Download any file in an S3 bucket larger than 1GB and store it in a local directory.
 
+Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer).
+
 ### Installation
 
 Install `prefect-managedfiletransfer` with `pip`. (Requires an installation of Python 3.10+.)
@@ -103,6 +105,8 @@ uv run python -m prefect_managedfiletransfer.deploy --docker
 Visit the server UI http://localhost:4200.
 1. Create 2 blocks, one source and one destination
 2. On the deployments page start a `transfer_files_flow`. Configure your flow run to copy/move files between the 2 blocks.
+
+Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer). Note this a work in progress auto generated documentation site so it is not perfect.
 
 ### Installation via docker - TODO
 
