@@ -7,6 +7,14 @@ from prefect_managedfiletransfer import transfer_files_flow, upload_file_flow
 import importlib.metadata
 import packaging.requirements
 
+from prefect_managedfiletransfer.ServerWithBasicAuthBlock import (
+    ServerWithBasicAuthBlock,
+)
+from prefect_managedfiletransfer.RCloneConfigFileBlock import RCloneConfigFileBlock
+from prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock import (
+    ServerWithPublicKeyAuthBlock,
+)
+
 MODULE_ID = "prefect_managedfiletransfer"
 
 
@@ -79,6 +87,15 @@ def deploy_flows(
         raise ValueError("Deployment failed")
 
 
+def register_blocks():
+    """
+    Register the Prefect blocks for the managed file transfer integration.
+    """
+    ServerWithBasicAuthBlock.register_type_and_schema()
+    ServerWithPublicKeyAuthBlock.register_type_and_schema()
+    RCloneConfigFileBlock.register_type_and_schema()
+
+
 def get_all_flows() -> list[Flow]:
     """
     Return all publically shared flows in the library making custom deployment easier.
@@ -120,4 +137,5 @@ if __name__ == "__main__":
         local_debug = True
 
     # TODO: could parse other args and pass them
+    register_blocks()
     deploy_flows(local=local_debug)
