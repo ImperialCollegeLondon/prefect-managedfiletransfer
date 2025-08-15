@@ -90,7 +90,7 @@ jobs:
     needs: [build-release]
     environment: "prod"
     runs-on: ubuntu-latest
-    if: github.event_name == 'tag'
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
 
     steps:
       - name: Download build artifacts
