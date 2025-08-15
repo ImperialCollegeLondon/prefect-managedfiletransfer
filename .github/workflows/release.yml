@@ -61,7 +61,8 @@ jobs:
           # https://hub.docker.com/r/managedfiletransfer/prefect-managedfiletransfer
           images: |
             managedfiletransfer/prefect-managedfiletransfer
-            ghcr.io/ImperialCollegeLondon/prefect-managedfiletransfer
+          # ghcr.io/ImperialCollegeLondon/prefect-managedfiletransfer
+          
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
