@@ -32,6 +32,7 @@ Key features
     - Transfer files on complex cron schedules
     - notifications on success/failure - slack, email, etc
     - Highly available server architecture - database server + multi-node workers and front ends.
+- Available as a [PyPi package](https://pypi.org/project/prefect-managedfiletransfer/) for integration into existing self hosted and cloud prefect deployments, and as a [docker image/appiance](https://hub.docker.com/r/managedfiletransfer/prefect-managedfiletransfer/tags)
 
 Example use cases:
 
@@ -108,13 +109,16 @@ Visit the server UI http://localhost:4200.
 
 Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer). Note this a work in progress auto generated documentation site so it is not perfect.
 
-### Installation via docker
+### Installation - docker
 
-Run prefect managed file transfer in a container, like an applicance. Note this is ephemeral - prefect has lots of docs on how to setup a database server with it.
+Run prefect managed file transfer in a docker container, like an applicance. See [Docker hub for a list of images](https://hub.docker.com/r/managedfiletransfer/prefect-managedfiletransfer/tags)
+ 
+
+Note this is ephemeral - prefect has lots of docs on how to setup a database server with it.
 
 ```bash
 # run prefect server in a self-removing container port-forwarded to your local machine’s 4200 port:
-docker run --rm -it -p 4200:4200 managedfiletransfer/prefect-managedfiletransfer:main
+docker run --rm -it -p 4200:4200 managedfiletransfer/prefect-managedfiletransfer:latest
 ```
 
 ### Components
