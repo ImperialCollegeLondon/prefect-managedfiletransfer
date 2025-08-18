@@ -316,18 +316,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#installation-local" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation
+      Installation - Local
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation-via-docker-todo" class="md-nav__link">
+  <a href="#installation-docker" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation via docker - TODO
+      Installation - docker
     </span>
   </a>
   
@@ -508,18 +508,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#installation-local" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation
+      Installation - Local
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation-via-docker-todo" class="md-nav__link">
+  <a href="#installation-docker" class="md-nav__link">
     <span class="md-ellipsis">
-      Installation via docker - TODO
+      Installation - docker
     </span>
   </a>
   
@@ -603,6 +603,7 @@
 <li>Highly available server architecture - database server + multi-node workers and front ends.</li>
 </ul>
 </li>
+<li>Available as a <a href="https://pypi.org/project/prefect-managedfiletransfer/">PyPi package</a> for integration into existing self hosted and cloud prefect deployments, and as a <a href="https://hub.docker.com/r/managedfiletransfer/prefect-managedfiletransfer/tags">docker image/appiance</a></li>
 </ul>
 <p>Example use cases:</p>
 <ul>
@@ -613,7 +614,7 @@
 <li>Copy file yyyy-MM-dd.zip from a remote server, where yyyy-MM-dd matches todays date, to a local directory and then unzip it.</li>
 <li>Download any file in an S3 bucket larger than 1GB and store it in a local directory.</li>
 </ul>
-<h3 id="installation">Installation</h3>
+<h3 id="installation-local">Installation - Local</h3>
 <p>Install <code>prefect-managedfiletransfer</code> with <code>pip</code>. (Requires an installation of Python 3.10+.)</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>prefect-managedfiletransfer
 <span class="c1"># or </span>
@@ -656,9 +657,11 @@ uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </sp
 <p>Visit the server UI http://localhost:4200.
 1. Create 2 blocks, one source and one destination
 2. On the deployments page start a <code>transfer_files_flow</code>. Configure your flow run to copy/move files between the 2 blocks.</p>
-<h3 id="installation-via-docker-todo">Installation via docker - TODO</h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># run prefect server in a container port-forwarded to your local machine’s 4200 port:</span>
-docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-p<span class="w"> </span><span class="m">4200</span>:4200<span class="w"> </span>prefecthq/prefect:3-latest<span class="w"> </span>--<span class="w"> </span>prefect<span class="w"> </span>server<span class="w"> </span>start<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0
+<h3 id="installation-docker">Installation - docker</h3>
+<p>Run prefect managed file transfer in a docker container, like an applicance. See <a href="https://hub.docker.com/r/managedfiletransfer/prefect-managedfiletransfer/tags">Docker hub for a list of images</a></p>
+<p>Note this is ephemeral - prefect has lots of docs on how to setup a database server with it.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># run prefect server in a self-removing container port-forwarded to your local machine’s 4200 port:</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">4200</span>:4200<span class="w"> </span>managedfiletransfer/prefect-managedfiletransfer:latest
 </code></pre></div>
 <h3 id="components">Components</h3>
 <p><strong>Flows</strong></p>
