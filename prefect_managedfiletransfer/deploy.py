@@ -36,10 +36,18 @@ def deploy_flows(
 
     to_be_deployed = []
     job_variables = job_variables or {}
+    image = None
 
     if local:
         build = False
         push = False
+    else:
+        image = DockerImage(
+            name=docker_image,
+            tag=docker_tag,
+            dockerfile="Dockerfile",
+            buildargs={"SOME_AUTH_ARG": ""},
+        )
     if build:
         job_variables = {**job_variables, "pip_packages": _get_dependencies()}
 
@@ -72,12 +80,7 @@ def deploy_flows(
     ids = deploy(
         *to_be_deployed,
         work_pool_name=work_pool_name,
-        image=DockerImage(
-            name=docker_image,
-            tag=docker_tag,
-            dockerfile="Dockerfile",
-            buildargs={"SOME_AUTH_ARG": ""},
-        ),
+        image=image,
         build=build,
         push=push,
     )

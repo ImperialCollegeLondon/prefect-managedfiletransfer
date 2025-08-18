@@ -1,6 +1,6 @@
 [project]
 name = "prefect-managedfiletransfer"
-version = "0.2.0"
+version = "0.3.0"
 description = "Upload and download files easily between Local/SFTP/Cloud storage using rclone"
 keywords = ["prefect", "file", "copy","move","transfer","SFTP","rclone"]
 readme = "README.md"

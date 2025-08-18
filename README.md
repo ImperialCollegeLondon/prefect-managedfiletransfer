@@ -44,7 +44,7 @@ Example use cases:
 
 Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer).
 
-### Installation
+### Installation - Local
 
 Install `prefect-managedfiletransfer` with `pip`. (Requires an installation of Python 3.10+.)
 
@@ -108,11 +108,13 @@ Visit the server UI http://localhost:4200.
 
 Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer). Note this a work in progress auto generated documentation site so it is not perfect.
 
-### Installation via docker - TODO
+### Installation via docker
+
+Run prefect managed file transfer in a container, like an applicance. Note this is ephemeral - prefect has lots of docs on how to setup a database server with it.
 
 ```bash
-# run prefect server in a container port-forwarded to your local machine’s 4200 port:
-docker run -d -p 4200:4200 prefecthq/prefect:3-latest -- prefect server start --host 0.0.0.0
+# run prefect server in a self-removing container port-forwarded to your local machine’s 4200 port:
+docker run --rm -it -p 4200:4200 managedfiletransfer/prefect-managedfiletransfer:main
 ```
 
 ### Components

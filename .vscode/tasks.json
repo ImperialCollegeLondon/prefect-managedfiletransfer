@@ -102,6 +102,38 @@
             "dependsOn": [
                 "Start prefect worker"
             ]
+        },
+        {
+            // you should  have already started the server on docker externally
+            // docker run -p 4200:4200 -d --rm prefecthq/prefect:3-latest -- prefect server start --host 0.0.0.0
+            "label": "Start prefect worker-docker",
+            "type": "shell",
+            "command": "PREFECT_API_URL='http://host.docker.internal:4200/api' uv run prefect worker start --pool 'default-pool' --type docker",
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": {
+                    "regexp": "_____"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^.*$",
+                    "endsPattern": "^.*Worker '.*' started!*$"
+                },
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+        },
+        {
+            "label": "Deploy-docker",
+            "type": "shell",
+            "command": "PREFECT_API_URL='http://host.docker.internal:4200/api' uv run python -m prefect_managedfiletransfer.deploy --docker",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Start prefect worker-docker"
+            ]
         }
     ]
 }
