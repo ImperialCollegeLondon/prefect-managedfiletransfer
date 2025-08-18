@@ -106,17 +106,23 @@ def sftp_client(
 def temp_file_path() -> Generator[Path, None, None]:
     """Fixture to create a temporary file for testing."""
 
-    with tempfile.NamedTemporaryFile() as temp_file:
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         # Write some content to the temporary file
 
         temp_file.write(b"test-input-file\n")
         test_data = b"0" * 1000
         temp_file.write(test_data)
         temp_file.flush()  # Ensure the content is written to disk
+        temp_file.close()  # Close the file to release the handle
 
         logger.debug(f"Temporary file created at: {temp_file.name}")
 
-        yield Path(temp_file.name)
+        path = Path(temp_file.name)
+
+        yield path
+
+        # temp file deletion raises exception if test has already deleted the file
+        path.unlink(missing_ok=True)
 
 
 @pytest.fixture(autouse=False)
