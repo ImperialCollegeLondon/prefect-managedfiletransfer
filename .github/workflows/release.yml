@@ -52,7 +52,7 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       
       - name: Docker meta
         id: meta
