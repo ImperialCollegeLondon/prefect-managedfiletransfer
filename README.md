@@ -22,8 +22,8 @@ This package is not the fastest solution to move files around, but it prioritise
 
 Key features
 
-- Copy and move files between almost any storage system easily.
-- Reliable file moving with checksumming, file size checking etc.
+- Copy, move, and delete files between almost any storage system easily.
+- Reliable file operations with checksumming, file size checking etc.
 - Smart and safe moving - settings to allow/block overwriting and to only copy files if they are new or changed.
 - Unzip/Untar compressed folders after downloading them.
 - Repath files as you move them.
@@ -39,9 +39,10 @@ Example use cases:
 - Once per day SSH into my database server and copy the latest *.bkup file to a central storage location.
 - Monitor a local network share directory for new files and automatically upload them to a cloud storage bucket.
 - Schedule a weekly job to synchronize files between two remote servers.
-- Move log files from a SSH available web server older than 30 days to a cold storage location.
+- Move log files from a SSH available web server older than 30 days to a cold storage location, then delete the originals.
 - Copy file yyyy-MM-dd.zip from a remote server, where yyyy-MM-dd matches todays date, to a local directory and then unzip it.
 - Download any file in an S3 bucket larger than 1GB and store it in a local directory.
+- Delete temporary files older than 7 days from a remote server to free up disk space.
 
 Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer).
 
@@ -125,8 +126,9 @@ docker run --rm -it -p 4200:4200 managedfiletransfer/prefect-managedfiletransfer
 
 **Flows**
 
-- transfer_files_flow - a fully featured flow for transferring files between different storage locations.
-- upload_file_flow - a flow for uploading a file to a remote server. Supports pattern matching by date
+- transfer_files_flow - a fully featured flow for transferring files between different storage locations. Supports copy and move modes.
+- upload_file_flow - a flow for uploading a file to a remote server. Supports pattern matching by date.
+- delete_files_flow - a flow for deleting files from a remote server based on pattern matching and filtering.
 
 **Blocks**
 
@@ -139,7 +141,7 @@ docker run --rm -it -p 4200:4200 managedfiletransfer/prefect-managedfiletransfer
 - list_remote_files_task - A task for listing files in a remote directory.
 - download_file_task - A task for downloading a single file from a remote server.
 - upload_file_task - A task for uploading a single file to a remote server.
-- [TODO] delete_file_task
+- delete_file_task - A task for deleting a single file from a remote server.
 
 ![Screenshot of transfer files flow](docs/img/transfer_files_screengrab.png)
 
@@ -183,4 +185,5 @@ pre-commit install
 ```
 ./build.sh
 ```
-8. `git commit`, `git push`, and create a pull request
+9. Use `./run_local.sh` to deploy a local prefect server, worker, and UI to test your changes
+10. `git commit`, `git push`, and create a pull request

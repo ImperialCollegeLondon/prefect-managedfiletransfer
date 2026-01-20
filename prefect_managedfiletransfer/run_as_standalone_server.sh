@@ -1,13 +1,19 @@
 #!/bin/bash
 
-#export PREFECT_LOGGING_LEVEL="INFO"
+# export PREFECT_LOGGING_LEVEL="INFO"
 # export PREFECT_LOGGING_ROOT_LEVEL="INFO"
 export PREFECT_LOGGING_EXTRA_LOGGERS="prefect_managedfiletransfer"
+export PREFECT_SERVER_UI_SHOW_PROMOTIONAL_CONTENT=false
 
 prefect config set PREFECT_SERVER_API_HOST=0.0.0.0
 prefect config set PREFECT_API_URL=http://127.0.0.1:4200/api
 
 echo "Starting Prefect server... as managed file transfer applicance"
+
+pidServer=0
+pidWorker=0
+
+trap "kill $pidServer $pidWorker; exit" SIGINT SIGTERM
 
 # Start the first process
 prefect server start &
@@ -35,5 +41,12 @@ fi
 # Wait for any process to exit
 wait -n $pidServer $pidWorker
 
+failId=$?
+echo "One of the processes has exited with code $failId"
+
+# kill all servers
+kill $pidServer
+kill $pidWorker
+
 # Exit with status of process that exited first
-exit $?
+exit $failId

@@ -14,7 +14,7 @@ import pytest
 
 from typer.testing import CliRunner
 
-runner = CliRunner(mix_stderr=False)
+runner = CliRunner()
 
 
 def invoke_upload_command(

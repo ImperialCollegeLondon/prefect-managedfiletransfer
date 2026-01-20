@@ -13,7 +13,7 @@ from typer.testing import CliRunner
 
 from prefect_managedfiletransfer.main import app
 
-runner = CliRunner(mix_stderr=False)
+runner = CliRunner()
 
 
 def invoke_download_command(

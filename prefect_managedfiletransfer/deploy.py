@@ -3,7 +3,11 @@ import sys
 from prefect import Flow, deploy
 from prefect.docker import DockerImage
 
-from prefect_managedfiletransfer import transfer_files_flow, upload_file_flow
+from prefect_managedfiletransfer import (
+    delete_files_flow,
+    transfer_files_flow,
+    upload_file_flow,
+)
 import importlib.metadata
 import packaging.requirements
 
@@ -104,7 +108,7 @@ def get_all_flows() -> list[Flow]:
     Return all publically shared flows in the library making custom deployment easier.
     """
 
-    mft_flow: list[Flow] = [transfer_files_flow, upload_file_flow]
+    mft_flow: list[Flow] = [transfer_files_flow, upload_file_flow, delete_files_flow]
 
     return mft_flow
 

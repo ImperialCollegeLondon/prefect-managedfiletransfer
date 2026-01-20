@@ -11,8 +11,10 @@ class CONSTANTS:
         UPLOAD_FILE = "upload-file"
         TRANSFER_FILES = "transfer-files"
         UNPACK_FILES = "unpack-files"
+        DELETE_FILES = "delete-files"
 
     class DEPLOYMENT_NAMES:
         UPLOAD_FILE = "upload_file"
         TRANSFER_FILES = "transfer_files"
         UNPACK_FILES = "unpack_files"
+        DELETE_FILES = "delete_files"

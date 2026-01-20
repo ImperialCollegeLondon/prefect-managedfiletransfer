@@ -1,3 +1,4 @@
+from prefect import State
 from prefect_managedfiletransfer import FileMatcher, TransferType, transfer_files_flow
 from prefect.filesystems import LocalFileSystem
 import pytest
@@ -26,6 +27,7 @@ async def test_transfer_files_flow_can_copy_locally(
         check_for_space_overhead=1024 * 1024 * 10,
     )
 
+    assert isinstance(result, list)
     assert len(result) == 1
     assert temp_folder_path.joinpath(temp_file_path.name).exists(), (
         "File should be copied to destination folder"
@@ -53,6 +55,7 @@ async def test_transfer_files_flow_can_move_locally(
         check_for_space=False,
     )
 
+    assert isinstance(result, list)
     assert len(result) == 1
     assert not temp_file_path.exists(), "File should be moved from source folder"
     assert temp_folder_path.joinpath(temp_file_path.name).exists(), (
@@ -77,9 +80,13 @@ async def test_transfer_files_flow_can_ignore_files(
             )
         ],
         mode=TransferType.Move,
+        return_state=True,
     )
 
-    assert len(result) == 0
+    assert isinstance(result, State)
+    assert result.is_completed()
+    assert result.name == "Skipped"
+
     assert temp_file_path.exists(), "File should NOT be moved from source folder"
     assert not temp_folder_path.joinpath(temp_file_path.name).exists(), (
         "File should not be moved to destination folder"

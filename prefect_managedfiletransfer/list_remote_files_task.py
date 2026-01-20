@@ -8,6 +8,7 @@ from prefect_managedfiletransfer.PathUtil import PathUtil
 from prefect_managedfiletransfer.FileMatcher import FileMatcher
 from prefect_managedfiletransfer.RemoteAsset import RemoteAsset
 from prefect_managedfiletransfer.list_remote_assets import list_remote_assets
+from prefect_managedfiletransfer.password_utils import get_password_value
 
 
 from prefect import task
@@ -68,7 +69,9 @@ async def list_remote_files_task(
                 source_block.username if hasattr(source_block, "username") else None
             ),
             password=(
-                source_block.password if hasattr(source_block, "password") else None
+                get_password_value(source_block.password)
+                if hasattr(source_block, "password")
+                else None
             ),
             private_key_path=(temp_key_file.get_path() if temp_key_file else None),
             rclone_config=rclone_config,

@@ -9,6 +9,7 @@ from prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock import (
     ServerWithPublicKeyAuthBlock,
 )
 from prefect_managedfiletransfer.upload_asset import upload_asset
+from prefect_managedfiletransfer.password_utils import get_password_value
 from prefect import task
 from prefect.filesystems import LocalFileSystem
 import logging
@@ -85,7 +86,7 @@ async def upload_file_task(
                 else None
             ),
             password=(
-                destination_block.password
+                get_password_value(destination_block.password)
                 if hasattr(destination_block, "password")
                 else None
             ),

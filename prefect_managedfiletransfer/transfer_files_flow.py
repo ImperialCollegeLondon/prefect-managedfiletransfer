@@ -22,8 +22,9 @@ from prefect_managedfiletransfer.RemoteConnectionType import RemoteConnectionTyp
 from prefect_managedfiletransfer.PathUtil import PathUtil
 from prefect_managedfiletransfer.RemoteAsset import RemoteAsset
 from prefect_managedfiletransfer.TransferType import TransferType
-from prefect import flow
+from prefect import State, flow
 from prefect.filesystems import LocalFileSystem
+from prefect.states import Completed
 import logging
 
 
@@ -75,7 +76,7 @@ async def transfer_files_flow(
     check_for_space_overhead: int = 2 * 1024 * 1024 * 1024,  # 2GB overhead
     mode: TransferType = TransferType.Copy,
     reference_date: datetime | None = None,
-) -> list:
+) -> list[Path] | State:
     """
     Transfers files from a source to a destination based on the provided matchers and mapping.
     Args:
@@ -177,6 +178,12 @@ async def transfer_files_flow(
             transferred.append(upload_result)
 
     logger.info(f"Transfer completed. {len(transferred)} files processed")
+
+    if len(transferred) == 0:
+        return Completed(
+            message="No files to transfer",
+            name=CONSTANTS.SKIPPED_STATE_NAME,
+        )
 
     return transferred
 

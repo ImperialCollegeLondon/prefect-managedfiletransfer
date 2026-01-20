@@ -9,6 +9,7 @@ from prefect_managedfiletransfer.RCloneCommandBuilder import RCloneCommandBuilde
 from prefect_managedfiletransfer.TransferType import TransferType
 from prefect_managedfiletransfer.ensure_space import ensure_space
 from prefect_managedfiletransfer.sftp_utils import connect_to_sftp_remote
+from prefect_managedfiletransfer.delete_asset import delete_asset
 
 from prefect_managedfiletransfer.AssetDownloadResult import AssetDownloadResult
 from prefect_managedfiletransfer.invoke_rclone import invoke_rclone
@@ -160,9 +161,10 @@ async def download_asset(
                 destination_temp_file, destination_path, file, overwrite
             )
             if result.success and mode == TransferType.Move:
-                logger.debug(f"Deleting original file {file.path} after move")
-                file.path.unlink()
-                logger.info(f"Deleted original file {file.path} after move")
+                await delete_asset(
+                    file=file,
+                    remote_type=RemoteConnectionType.LOCAL,
+                )
 
         case RemoteConnectionType.SFTP:
             transport = None
@@ -200,9 +202,18 @@ async def download_asset(
                 )
 
                 if result.success and mode == TransferType.Move:
+                    # We could pass this on the the shared code for delete - but that has overheads of connecting again
+                    # await delete_asset(
+                    #     file=file,
+                    #     remote_type=RemoteConnectionType.SFTP,
+                    #     host=host,
+                    #     port=port,
+                    #     username=username,
+                    #     password=password,
+                    #     private_key_path=private_key_path,
+                    # )
                     logger.info(f"Deleting remote file {file.path.name} after move")
                     sftp.remove(file.path.name)
-
             finally:
                 if sftp is not None:
                     sftp.close()
@@ -244,27 +255,12 @@ async def download_asset(
                 None, destination_path, file, overwrite
             )
             if result.success and mode == TransferType.Move:
-                logger.debug(f"Deleting original file {file.path} after move")
-
-                return_code, config_after, captured_output, exception = invoke_rclone(
-                    RCloneCommandBuilder(rclone_config_file, rclone_config)
-                    .deleteFile(file.path)
-                    .build(),
-                    config_file_contents=(
-                        rclone_config.get_config() if rclone_config else None
-                    ),
-                    logger=logger,
+                await delete_asset(
+                    file=file,
+                    remote_type=RemoteConnectionType.RCLONE,
+                    rclone_config_file=rclone_config_file,
+                    rclone_config=rclone_config,
                 )
-
-                if return_code != 0 and type(exception) is not FileNotFoundError:
-                    logger.error(
-                        f"Failed to delete remote file {file.path} with rclone, return code {return_code}"
-                    )
-                    raise RuntimeError(
-                        f"Failed to delete remote file {file.path} with rclone, return code {return_code}"
-                    )
-                else:
-                    logger.info(f"Deleted original file {file.path} after move")
 
         case _:
             logger.critical(f"Unknown remote type {remote_type}")
