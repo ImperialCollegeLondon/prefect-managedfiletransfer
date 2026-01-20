@@ -230,9 +230,7 @@ async def test_delete_files_flow_preserves_non_matching_files(
 
 
 @pytest.mark.asyncio
-async def test_delete_files_flow_with_block_name_string(
-    prefect_db, temp_folder_path
-):
+async def test_delete_files_flow_with_block_name_string(prefect_db, temp_folder_path):
     """Test that flow can load a block by name (string parameter)."""
     # Create test file
     file_to_delete = temp_folder_path / "test_blockname.txt"
