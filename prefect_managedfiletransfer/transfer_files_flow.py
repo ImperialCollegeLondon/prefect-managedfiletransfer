@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 from pathlib import Path
 from prefect.runtime import flow_run
-from prefect_managedfiletransfer import TransferBlockType
 from prefect_managedfiletransfer.list_remote_files_task import list_remote_files_task
 from prefect_managedfiletransfer.FileToFolderMapping import FileToFolderMapping
 from prefect_managedfiletransfer.FileMatcher import FileMatcher
@@ -22,6 +21,7 @@ from prefect_managedfiletransfer.RemoteConnectionType import RemoteConnectionTyp
 from prefect_managedfiletransfer.PathUtil import PathUtil
 from prefect_managedfiletransfer.RemoteAsset import RemoteAsset
 from prefect_managedfiletransfer.TransferType import TransferType
+from prefect_managedfiletransfer.block_utils import try_fetch_block
 from prefect import State, flow
 from prefect.filesystems import LocalFileSystem
 from prefect.states import Completed
@@ -33,8 +33,8 @@ logger = logging.getLogger(__name__)
 
 def _generate_flow_run_name() -> str:
     parameters = flow_run.parameters
-    source = parameters["source_block"]
-    dest = parameters["destination_block"]
+    source = parameters["source_block_or_blockname"]
+    dest = parameters["destination_block_or_blockname"]
     source_file_matchers: list[FileMatcher] = parameters["source_file_matchers"]
     destination_folder = parameters["destination_folder"]
     mode = parameters["mode"]
@@ -65,8 +65,20 @@ def _generate_flow_run_name() -> str:
     timeout_seconds=60 * 30,  # timeout after 30 minutes
 )
 async def transfer_files_flow(
-    source_block: TransferBlockType,
-    destination_block: TransferBlockType,
+    source_block_or_blockname: (
+        ServerWithBasicAuthBlock
+        | ServerWithPublicKeyAuthBlock
+        | LocalFileSystem
+        | RCloneConfigFileBlock
+        | str
+    ),
+    destination_block_or_blockname: (
+        ServerWithBasicAuthBlock
+        | ServerWithPublicKeyAuthBlock
+        | LocalFileSystem
+        | RCloneConfigFileBlock
+        | str
+    ),
     source_file_matchers: list[FileMatcher] = [FileMatcher()],
     path_mapping: list[FileToFolderMapping] = [],
     destination_folder: Path = Path("."),
@@ -80,8 +92,8 @@ async def transfer_files_flow(
     """
     Transfers files from a source to a destination based on the provided matchers and mapping.
     Args:
-        source_block: The source block to transfer files from.
-        destination_block: The destination block to transfer files to.
+        source_block_or_blockname: The source block or block name to transfer files from.
+        destination_block_or_blockname: The destination block or block name to transfer files to.
         source_file_matchers: List of file matcheing patterns to find and filter files in the source.
         path_mapping: List of file-to-folder mappings for transferring files.
         destination_folder: The path of the folder in destination_block where files will be transferred.
@@ -99,6 +111,34 @@ async def transfer_files_flow(
 
     if reference_date is None:
         reference_date = datetime.now(timezone.utc)
+
+    if source_block_or_blockname is None:
+        raise ValueError("Source block or blockname is missing")
+
+    if destination_block_or_blockname is None:
+        raise ValueError("Destination block or blockname is missing")
+
+    source_block: (
+        ServerWithBasicAuthBlock
+        | ServerWithPublicKeyAuthBlock
+        | LocalFileSystem
+        | RCloneConfigFileBlock
+    )
+    if isinstance(source_block_or_blockname, str):
+        source_block = await try_fetch_block(source_block_or_blockname)
+    else:
+        source_block = source_block_or_blockname
+
+    destination_block: (
+        ServerWithBasicAuthBlock
+        | ServerWithPublicKeyAuthBlock
+        | LocalFileSystem
+        | RCloneConfigFileBlock
+    )
+    if isinstance(destination_block_or_blockname, str):
+        destination_block = await try_fetch_block(destination_block_or_blockname)
+    else:
+        destination_block = destination_block_or_blockname
 
     # cannot both be local file systems
     if not isinstance(source_block, LocalFileSystem) and not isinstance(
