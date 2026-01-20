@@ -649,8 +649,8 @@
 
         <p>Transfers files from a source to a destination based on the provided matchers and mapping.
 Args:
-    source_block: The source block to transfer files from.
-    destination_block: The destination block to transfer files to.
+    source_block_or_blockname: The source block or block name to transfer files from.
+    destination_block_or_blockname: The destination block or block name to transfer files to.
     source_file_matchers: List of file matcheing patterns to find and filter files in the source.
     path_mapping: List of file-to-folder mappings for transferring files.
     destination_folder: The path of the folder in destination_block where files will be transferred.
@@ -795,7 +795,47 @@ Returns:
 <span class="normal">185</span>
 <span class="normal">186</span>
 <span class="normal">187</span>
-<span class="normal">188</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">FLOW_NAMES</span><span class="o">.</span><span class="n">TRANSFER_FILES</span><span class="p">,</span>
     <span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">flow_run_name</span><span class="o">=</span><span class="n">_generate_flow_run_name</span><span class="p">,</span>
@@ -804,8 +844,20 @@ Returns:
     <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>  <span class="c1"># timeout after 30 minutes</span>
 <span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">transfer_files_flow</span><span class="p">(</span>
-    <span class="n">source_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
-    <span class="n">destination_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
+    <span class="n">source_block_or_blockname</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+        <span class="o">|</span> <span class="nb">str</span>
+    <span class="p">),</span>
+    <span class="n">destination_block_or_blockname</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+        <span class="o">|</span> <span class="nb">str</span>
+    <span class="p">),</span>
     <span class="n">source_file_matchers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileMatcher</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">FileMatcher</span><span class="p">()],</span>
     <span class="n">path_mapping</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileToFolderMapping</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
     <span class="n">destination_folder</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
@@ -819,8 +871,8 @@ Returns:
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transfers files from a source to a destination based on the provided matchers and mapping.</span>
 <span class="sd">    Args:</span>
-<span class="sd">        source_block: The source block to transfer files from.</span>
-<span class="sd">        destination_block: The destination block to transfer files to.</span>
+<span class="sd">        source_block_or_blockname: The source block or block name to transfer files from.</span>
+<span class="sd">        destination_block_or_blockname: The destination block or block name to transfer files to.</span>
 <span class="sd">        source_file_matchers: List of file matcheing patterns to find and filter files in the source.</span>
 <span class="sd">        path_mapping: List of file-to-folder mappings for transferring files.</span>
 <span class="sd">        destination_folder: The path of the folder in destination_block where files will be transferred.</span>
@@ -838,6 +890,34 @@ Returns:
 
     <span class="k">if</span> <span class="n">reference_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">reference_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">source_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Source block or blockname is missing&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">destination_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Destination block or blockname is missing&quot;</span><span class="p">)</span>
+
+    <span class="n">source_block</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_block_or_blockname</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">source_block</span> <span class="o">=</span> <span class="k">await</span> <span class="n">try_fetch_block</span><span class="p">(</span><span class="n">source_block_or_blockname</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">source_block</span> <span class="o">=</span> <span class="n">source_block_or_blockname</span>
+
+    <span class="n">destination_block</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block_or_blockname</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">destination_block</span> <span class="o">=</span> <span class="k">await</span> <span class="n">try_fetch_block</span><span class="p">(</span><span class="n">destination_block_or_blockname</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">destination_block</span> <span class="o">=</span> <span class="n">destination_block_or_blockname</span>
 
     <span class="c1"># cannot both be local file systems</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="n">LocalFileSystem</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
@@ -1119,8 +1199,7 @@ Returns:
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>prefect_managedfiletransfer/upload_file_flow.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 36</span>
-<span class="normal"> 37</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 37</span>
 <span class="normal"> 38</span>
 <span class="normal"> 39</span>
 <span class="normal"> 40</span>
@@ -1267,8 +1346,7 @@ Returns:
 <span class="normal">181</span>
 <span class="normal">182</span>
 <span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
+<span class="normal">184</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">FLOW_NAMES</span><span class="o">.</span><span class="n">UPLOAD_FILE</span><span class="p">,</span>
     <span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">flow_run_name</span><span class="o">=</span><span class="n">generate_flow_run_name</span><span class="p">,</span>
@@ -1331,9 +1409,7 @@ Returns:
         <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block_or_blockname</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">destination_block</span> <span class="o">=</span> <span class="k">await</span> <span class="n">try_fetch_upload_destination</span><span class="p">(</span>
-            <span class="n">destination_block_or_blockname</span>
-        <span class="p">)</span>
+        <span class="n">destination_block</span> <span class="o">=</span> <span class="k">await</span> <span class="n">try_fetch_block</span><span class="p">(</span><span class="n">destination_block_or_blockname</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">destination_block</span> <span class="o">=</span> <span class="n">destination_block_or_blockname</span>
     <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1495,14 +1571,14 @@ Returns:
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>source_block</code>
+                <code>source_block_or_blockname</code>
             </td>
             <td>
-                  <code><span title="prefect_managedfiletransfer.TransferBlockType">TransferBlockType</span></code>
+                  <code><span title="prefect_managedfiletransfer.ServerWithBasicAuthBlock.ServerWithBasicAuthBlock">ServerWithBasicAuthBlock</span> | <span title="prefect_managedfiletransfer.ServerWithPublicKeyAuthBlock.ServerWithPublicKeyAuthBlock">ServerWithPublicKeyAuthBlock</span> | <span title="prefect.filesystems.LocalFileSystem">LocalFileSystem</span> | <span title="prefect_managedfiletransfer.RCloneConfigFileBlock.RCloneConfigFileBlock">RCloneConfigFileBlock</span> | <span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The source block to delete files from.</p>
+                <p>The source block or block name to delete files from.</p>
               </div>
             </td>
             <td>
@@ -1570,8 +1646,7 @@ Returns:
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>prefect_managedfiletransfer/delete_files_flow.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 44</span>
-<span class="normal"> 45</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 45</span>
 <span class="normal"> 46</span>
 <span class="normal"> 47</span>
 <span class="normal"> 48</span>
@@ -1636,7 +1711,28 @@ Returns:
 <span class="normal">107</span>
 <span class="normal">108</span>
 <span class="normal">109</span>
-<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">FLOW_NAMES</span><span class="o">.</span><span class="n">DELETE_FILES</span><span class="p">,</span>
     <span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">flow_run_name</span><span class="o">=</span><span class="n">_generate_flow_run_name</span><span class="p">,</span>
@@ -1645,7 +1741,13 @@ Returns:
     <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>  <span class="c1"># timeout after 30 minutes</span>
 <span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_files_flow</span><span class="p">(</span>
-    <span class="n">source_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
+    <span class="n">source_block_or_blockname</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+        <span class="o">|</span> <span class="nb">str</span>
+    <span class="p">),</span>
     <span class="n">source_file_matchers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileMatcher</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">FileMatcher</span><span class="p">()],</span>
     <span class="n">reference_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">|</span> <span class="n">State</span><span class="p">:</span>
@@ -1653,7 +1755,7 @@ Returns:
 <span class="sd">    Deletes files from a source based on the provided matchers.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        source_block: The source block to delete files from.</span>
+<span class="sd">        source_block_or_blockname: The source block or block name to delete files from.</span>
 <span class="sd">        source_file_matchers: List of file matching patterns to find and filter files in the source.</span>
 <span class="sd">        reference_date: defaults to now() in UTC - used to filter files based on modification time, and for pattern replacement in file names</span>
 
@@ -1665,6 +1767,20 @@ Returns:
 
     <span class="k">if</span> <span class="n">reference_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">reference_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">source_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Source block or blockname is missing&quot;</span><span class="p">)</span>
+
+    <span class="n">source_block</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">ServerWithBasicAuthBlock</span>
+        <span class="o">|</span> <span class="n">ServerWithPublicKeyAuthBlock</span>
+        <span class="o">|</span> <span class="n">LocalFileSystem</span>
+        <span class="o">|</span> <span class="n">RCloneConfigFileBlock</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_block_or_blockname</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">source_block</span> <span class="o">=</span> <span class="k">await</span> <span class="n">try_fetch_block</span><span class="p">(</span><span class="n">source_block_or_blockname</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">source_block</span> <span class="o">=</span> <span class="n">source_block_or_blockname</span>
 
     <span class="n">source_type</span> <span class="o">=</span> <span class="n">map_block_to_remote_type</span><span class="p">(</span><span class="n">source_block</span><span class="p">)</span>
     <span class="n">rclone_source_config</span> <span class="o">=</span> <span class="p">(</span>
