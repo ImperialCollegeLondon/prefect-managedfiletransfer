@@ -20,6 +20,7 @@ from prefect_managedfiletransfer.ServerWithBasicAuthBlock import (
 )
 from prefect_managedfiletransfer.upload_asset import upload_asset
 from prefect_managedfiletransfer.TransferType import TransferType
+from prefect_managedfiletransfer.block_utils import try_fetch_block
 
 
 def generate_flow_run_name() -> str:
@@ -96,9 +97,7 @@ async def upload_file_flow(
         | RCloneConfigFileBlock
     )
     if isinstance(destination_block_or_blockname, str):
-        destination_block = await try_fetch_upload_destination(
-            destination_block_or_blockname
-        )
+        destination_block = await try_fetch_block(destination_block_or_blockname)
     else:
         destination_block = destination_block_or_blockname
     result: int | None = None
@@ -183,58 +182,3 @@ async def upload_file_flow(
         raise RuntimeError(
             f"Failed to upload {pattern_to_upload} to {destination_file}. Exit code {result}"
         )
-
-
-async def try_fetch_upload_destination(
-    destination_block_name,
-) -> (
-    ServerWithBasicAuthBlock
-    | ServerWithPublicKeyAuthBlock
-    | LocalFileSystem
-    | RCloneConfigFileBlock
-    | None
-):
-    logger = get_run_logger()
-    result = None
-
-    logger.info(
-        f"Trying loading destination details from block with key {destination_block_name}"
-    )
-
-    try:
-        result = await ServerWithBasicAuthBlock.aload(destination_block_name)
-        logger.debug(
-            f"Loaded SFTP details from block with key {destination_block_name}"
-        )
-    except ValueError:
-        logger.debug(
-            f"Failed to load ServerWithBasicAuthBlock with key {destination_block_name}"
-        )
-
-    try:
-        result = await ServerWithPublicKeyAuthBlock.aload(destination_block_name)
-        logger.debug(
-            f"Loaded ServerWithPublicKeyAuthBlock with key {destination_block_name}"
-        )
-    except ValueError:
-        logger.debug(
-            f"Failed to load ServerWithPublicKeyAuthBlock with key {destination_block_name}"
-        )
-
-    try:
-        result = await LocalFileSystem.aload(destination_block_name)
-        logger.debug(f"Loaded LocalFileSystem with key {destination_block_name}")
-    except ValueError:
-        logger.debug(
-            f"Failed to load LocalFileSystem with key {destination_block_name}"
-        )
-
-    try:
-        result = await RCloneConfigFileBlock.aload(destination_block_name)
-        logger.debug(f"Loaded RCloneConfigFileBlock with key {destination_block_name}")
-    except ValueError:
-        logger.debug(
-            f"Failed to load RCloneConfigFileBlock with key {destination_block_name}"
-        )
-
-    return result

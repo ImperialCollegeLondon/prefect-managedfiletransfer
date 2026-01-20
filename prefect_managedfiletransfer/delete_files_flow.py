@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 from pathlib import Path
 from prefect.runtime import flow_run
-from prefect_managedfiletransfer import TransferBlockType
 from prefect_managedfiletransfer.list_remote_files_task import list_remote_files_task
 from prefect_managedfiletransfer.FileMatcher import FileMatcher
 from prefect_managedfiletransfer.RCloneConfigSavedInPrefect import (
@@ -18,7 +17,9 @@ from prefect_managedfiletransfer.delete_file_task import delete_file_task
 from prefect_managedfiletransfer.constants import CONSTANTS
 from prefect_managedfiletransfer.RemoteConnectionType import RemoteConnectionType
 from prefect_managedfiletransfer.RemoteAsset import RemoteAsset
+from prefect_managedfiletransfer.block_utils import try_fetch_block
 from prefect import State, flow
+from prefect.filesystems import LocalFileSystem
 import logging
 from prefect.states import Completed
 
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def _generate_flow_run_name() -> str:
     parameters = flow_run.parameters
-    source = parameters["source_block"]
+    source = parameters["source_block_or_blockname"]
     source_file_matchers: list[FileMatcher] = parameters["source_file_matchers"]
 
     if hasattr(source, "host"):
@@ -50,7 +51,13 @@ def _generate_flow_run_name() -> str:
     timeout_seconds=60 * 30,  # timeout after 30 minutes
 )
 async def delete_files_flow(
-    source_block: TransferBlockType,
+    source_block_or_blockname: (
+        ServerWithBasicAuthBlock
+        | ServerWithPublicKeyAuthBlock
+        | LocalFileSystem
+        | RCloneConfigFileBlock
+        | str
+    ),
     source_file_matchers: list[FileMatcher] = [FileMatcher()],
     reference_date: datetime | None = None,
 ) -> list[Path] | State:
@@ -58,7 +65,7 @@ async def delete_files_flow(
     Deletes files from a source based on the provided matchers.
 
     Args:
-        source_block: The source block to delete files from.
+        source_block_or_blockname: The source block or block name to delete files from.
         source_file_matchers: List of file matching patterns to find and filter files in the source.
         reference_date: defaults to now() in UTC - used to filter files based on modification time, and for pattern replacement in file names
 
@@ -70,6 +77,20 @@ async def delete_files_flow(
 
     if reference_date is None:
         reference_date = datetime.now(timezone.utc)
+
+    if source_block_or_blockname is None:
+        raise ValueError("Source block or blockname is missing")
+
+    source_block: (
+        ServerWithBasicAuthBlock
+        | ServerWithPublicKeyAuthBlock
+        | LocalFileSystem
+        | RCloneConfigFileBlock
+    )
+    if isinstance(source_block_or_blockname, str):
+        source_block = await try_fetch_block(source_block_or_blockname)
+    else:
+        source_block = source_block_or_blockname
 
     source_type = map_block_to_remote_type(source_block)
     rclone_source_config = (

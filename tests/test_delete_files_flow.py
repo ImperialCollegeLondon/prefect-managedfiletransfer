@@ -23,7 +23,7 @@ async def test_delete_files_flow_can_delete_local_file(prefect_db, temp_file_pat
     assert temp_file_path.exists()
 
     result = await delete_files_flow(
-        source_block=source,
+        source_block_or_blockname=source,
         source_file_matchers=[
             FileMatcher(
                 source_folder=temp_file_path.parent,
@@ -59,7 +59,7 @@ async def test_delete_files_flow_can_delete_multiple_local_files(
     assert file3.exists()
 
     result = await delete_files_flow(
-        source_block=source,
+        source_block_or_blockname=source,
         source_file_matchers=[
             FileMatcher(
                 source_folder=temp_folder_path,
@@ -83,7 +83,7 @@ async def test_delete_files_flow_with_no_matching_files(
     source = LocalFileSystem(basepath=temp_file_path.parent)
 
     result = await delete_files_flow(
-        source_block=source,
+        source_block_or_blockname=source,
         source_file_matchers=[
             FileMatcher(
                 source_folder=temp_file_path.parent,
@@ -120,7 +120,7 @@ async def test_delete_files_flow_with_multiple_matchers(prefect_db, temp_folder_
     assert file3.exists()
 
     result = await delete_files_flow(
-        source_block=source,
+        source_block_or_blockname=source,
         source_file_matchers=[
             FileMatcher(
                 source_folder=temp_folder_path,
@@ -176,7 +176,7 @@ async def test_delete_files_flow_sftp(
     )
 
     result = await delete_files_flow(
-        source_block=source_block,
+        source_block_or_blockname=source_block,
         source_file_matchers=[
             FileMatcher(
                 source_folder=source_path1.parent,
@@ -214,7 +214,7 @@ async def test_delete_files_flow_preserves_non_matching_files(
     assert file_to_keep.exists()
 
     result = await delete_files_flow(
-        source_block=source,
+        source_block_or_blockname=source,
         source_file_matchers=[
             FileMatcher(
                 source_folder=temp_folder_path,
@@ -227,3 +227,35 @@ async def test_delete_files_flow_preserves_non_matching_files(
     assert len(result) == 1
     assert not file_to_delete.exists(), "Matching file should be deleted"
     assert file_to_keep.exists(), "Non-matching file should be preserved"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_with_block_name_string(
+    prefect_db, temp_folder_path
+):
+    """Test that flow can load a block by name (string parameter)."""
+    # Create test file
+    file_to_delete = temp_folder_path / "test_blockname.txt"
+    file_to_delete.write_text("test content")
+
+    # Create and save a block with a name
+    source = LocalFileSystem(basepath=temp_folder_path)
+    await source.save("test-delete-source-block")
+
+    # Verify file exists before deletion
+    assert file_to_delete.exists()
+
+    # Call flow with block name as string
+    result = await delete_files_flow(
+        source_block_or_blockname="test-delete-source-block",
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match="test_blockname.txt",
+            )
+        ],
+    )
+
+    assert isinstance(result, list)
+    assert len(result) == 1
+    assert not file_to_delete.exists(), "File should be deleted"
