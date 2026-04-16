@@ -70,6 +70,8 @@ omit = [
     "tests/*",
     # Don't include the version file in the coverage report:
     "prefect_managedfiletransfer/_version.py",
+    # Don't include CI temporary files in the coverage report:
+    "/home/runner/work/_temp/*",
 ]
 
 [tool.coverage.report]
