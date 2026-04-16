@@ -1,6 +1,6 @@
 [project]
 name = "prefect-managedfiletransfer"
-version = "0.4.1"
+version = "0.5.0"
 description = "Upload, download, and delete files easily between Local/SFTP/Cloud storage using rclone"
 keywords = ["prefect", "file", "copy","move","transfer","delete","SFTP","rclone"]
 readme = "README.md"
@@ -70,6 +70,8 @@ omit = [
     "tests/*",
     # Don't include the version file in the coverage report:
     "prefect_managedfiletransfer/_version.py",
+    # Don't include CI temporary files in the coverage report:
+    "/home/runner/work/_temp/*",
 ]
 
 [tool.coverage.report]
