@@ -16,9 +16,11 @@
 
 Turn a prefect.io server into a managed file transfer solution. UI and Programatic creation of cron style jobs (aka Flows!) to upload and download files easily between servers. Support local, SFTP remotes plus any Cloud storage supported by rclone -  so thats aws, azure, google, sharepoint, and [many more](https://rclone.org/overview/) out of the box.
 
-Using prefect for managed file transfer means retries, logging, multi node and [high availability](https://docs.prefect.io/v3/advanced/self-hosted) come as standard - turning prefect into a reliable enterprise ready file transfer solution. 
+Using prefect for managed file transfer means retries, logging, multi node and [high availability](https://docs.prefect.io/v3/advanced/self-hosted) come as standard - turning prefect into a reliable enterprise ready file transfer solution.
 
 This package is not the fastest solution to move files around, but it prioritises reliability and ease of use, making it an excellent choice for replacing both quick cron job copy scripts and enterprise managed file transfer appliances.
+
+**RClone:** This package will automatically use rclone from your system PATH if it is already installed. If rclone is not found on the PATH, it will fall back to using a bundled copy of rclone (currently version **v1.71.0**) included in the package for Linux, Windows, and macOS.
 
 Key features
 
