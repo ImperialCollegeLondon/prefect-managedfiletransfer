@@ -8,6 +8,7 @@ class RCloneConfigSavedInPrefect(RCloneConfig):
     """
 
     def __init__(self, block: RCloneConfigFileBlock):
+        super().__init__()
         self._block = block
         self.remote_name = block.remote_name
 
