@@ -18,7 +18,7 @@ RUN apt-get update && \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install UV from official image - pin to specific version for build caching
-COPY --from=ghcr.io/astral-sh/uv:0.8.9 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.11.23 /uv /bin/uv
 
 WORKDIR /app
 
@@ -38,4 +38,3 @@ RUN prefect version
 ENTRYPOINT ["/usr/bin/tini", "-g", "--", "./prefect_managedfiletransfer/entrypoint.sh"]
 
 CMD [ "bash", "./prefect_managedfiletransfer/run_as_standalone_server.sh" ]
-
