@@ -56,7 +56,7 @@ def connect_to_sftp_remote(
 def from_private_key(file_obj, password=None) -> PKey:
     """
     Load a private key from a file-like object, where the key type is not known upfront
-    Supports RSA, DSA, ECDSA, and Ed25519 keys and returns the correct PKey object needed by Paramiko
+    Supports RSA, ECDSA, and Ed25519 keys and returns the correct PKey object needed by Paramiko
     :param file_obj: A file-like object containing the private key.
     :param password: Optional password for encrypted keys.
     :return: An instance of PKey (RSAKey, Ed25519Key, ECDSAKey).
@@ -83,7 +83,7 @@ def from_private_key(file_obj, password=None) -> PKey:
             logger.info(f"Tried and failed to load key as a PEM private key: {e_pem}")
             # Fallback to DER format if PEM format fails
             raise ValueError(
-                f"Failed to load private key from file. Ensure it is in a supported format (OpenSSH or PEM, with RSA or Ed25519).\nError for PEM: {e_pem}\nError for SSH: {e_ssh}"
+                f"Failed to load private key from file. Ensure it is in a supported format (OpenSSH or PEM, with RSA, ECDSA, or Ed25519).\nError for PEM: {e_pem}\nError for SSH: {e_ssh}"
             )
         if password:
             encryption_algorithm = crypto_serialization.BestAvailableEncryption(
@@ -100,27 +100,26 @@ def from_private_key(file_obj, password=None) -> PKey:
         )
     if isinstance(key, rsa.RSAPrivateKey):
         private_key = RSAKey.from_private_key(file_obj, password)
-        logger.debug(f"Loaded RSA private key from file {file_obj.name}")
+        logger.debug(
+            f"Loaded RSA private key from file {getattr(file_obj, 'name', '<memory>')}"
+        )
     elif isinstance(key, ed25519.Ed25519PrivateKey):
         private_key = Ed25519Key.from_private_key(file_obj, password)
-        logger.debug(f"Loaded Ed25519 private key from file {file_obj.name}")
+        logger.debug(
+            f"Loaded Ed25519 private key from file {getattr(file_obj, 'name', '<memory>')}"
+        )
     elif isinstance(key, ec.EllipticCurvePrivateKey):
         private_key = ECDSAKey.from_private_key(file_obj, password)
-        logger.debug(f"Loaded ECDSA private key from file {file_obj.name}")
-    elif isinstance(key, dsa.DSAPrivateKey):
-        logger.warning(
-            "DSA keys are not recommended as they are old and insecure, consider using RSA or Ed25519 instead"
+        logger.debug(
+            f"Loaded ECDSA private key from file {getattr(file_obj, 'name', '<memory>')}"
         )
-        try:
-            from paramiko import DSSKey  # noqa: F401
-
-            private_key = DSSKey.from_private_key(file_obj, password)
-        except ImportError as ex:
-            logger.error(f"Failed to import DSSKey: {ex}")
-            logger.error(
-                "DSSKey is not supported by Paramiko anymore - if you really need this use an old version of paramiko at your own risk"
-            )
-            raise ValueError("DSSKey is not supported by Paramiko", ex)
+    elif isinstance(key, dsa.DSAPrivateKey):
+        logger.error(
+            "DSA keys are not supported because they are insecure; use RSA, ECDSA, or Ed25519 instead"
+        )
+        raise ValueError(
+            "DSA private keys are not supported because they are insecure; use RSA, ECDSA, or Ed25519 instead"
+        )
     else:
         raise TypeError("Unsupported key type: {}".format(type(key)))
     return private_key
