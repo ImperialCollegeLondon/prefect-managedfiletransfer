@@ -100,13 +100,19 @@ def from_private_key(file_obj, password=None) -> PKey:
         )
     if isinstance(key, rsa.RSAPrivateKey):
         private_key = RSAKey.from_private_key(file_obj, password)
-        logger.debug(f"Loaded RSA private key from file {file_obj.name}")
+        logger.debug(
+            f"Loaded RSA private key from file {getattr(file_obj, 'name', '<memory>')}"
+        )
     elif isinstance(key, ed25519.Ed25519PrivateKey):
         private_key = Ed25519Key.from_private_key(file_obj, password)
-        logger.debug(f"Loaded Ed25519 private key from file {file_obj.name}")
+        logger.debug(
+            f"Loaded Ed25519 private key from file {getattr(file_obj, 'name', '<memory>')}"
+        )
     elif isinstance(key, ec.EllipticCurvePrivateKey):
         private_key = ECDSAKey.from_private_key(file_obj, password)
-        logger.debug(f"Loaded ECDSA private key from file {file_obj.name}")
+        logger.debug(
+            f"Loaded ECDSA private key from file {getattr(file_obj, 'name', '<memory>')}"
+        )
     elif isinstance(key, dsa.DSAPrivateKey):
         logger.error(
             "DSA keys are not supported because they are insecure; use RSA, ECDSA, or Ed25519 instead"
