@@ -1,0 +1,85 @@
+name: Dependabot Auto-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-actor:
+    name: Check PR actor is dependabot
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    outputs:
+      is-dependabot: ${{ steps.check.outputs.is-dependabot }}
+    steps:
+      - name: Confirm dependabot actor
+        id: check
+        run: echo "is-dependabot=true" >> "$GITHUB_OUTPUT"
+
+  copilot-review:
+    name: Request and await Copilot review
+    runs-on: ubuntu-latest
+    needs: check-actor
+    if: needs.check-actor.outputs.is-dependabot == 'true'
+    steps:
+      - name: Request Copilot code review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
+            -f "reviewers[]=copilot-pull-request-reviewer" \
+            || echo "Copilot reviewer request failed or already requested – continuing"
+
+      - name: Wait for Copilot review (up to 10 minutes)
+        id: await-review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Waiting for Copilot review on PR #${PR_NUMBER}…"
+          for i in $(seq 1 20); do
+            sleep 30
+            STATE=$(gh api \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "/repos/${REPO}/pulls/${PR_NUMBER}/reviews" \
+              --jq '[.[] | select(.user.login == "copilot-pull-request-reviewer")] | last | .state // "PENDING"')
+            echo "Copilot review state: ${STATE}"
+            if [ "${STATE}" = "APPROVED" ]; then
+              echo "copilot-state=approved" >> "$GITHUB_OUTPUT"
+              exit 0
+            elif [ "${STATE}" = "CHANGES_REQUESTED" ]; then
+              echo "copilot-state=changes_requested" >> "$GITHUB_OUTPUT"
+              echo "::error::Copilot requested changes – aborting auto-merge."
+              exit 1
+            fi
+          done
+          echo "::error::Timed out waiting for Copilot review – aborting auto-merge."
+          exit 1
+
+  auto-merge:
+    name: Auto-merge dependabot PR
+    runs-on: ubuntu-latest
+    needs: copilot-review
+    steps:
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh pr merge "${PR_NUMBER}" \
+            --repo "${REPO}" \
+            --auto \
+            --squash
