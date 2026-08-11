@@ -7,11 +7,41 @@ from prefect_managedfiletransfer import FileMatcher, delete_files_flow
 from prefect_managedfiletransfer.ServerWithBasicAuthBlock import (
     ServerWithBasicAuthBlock,
 )
+from prefect_managedfiletransfer.RCloneConfigFileBlock import RCloneConfigFileBlock
+from prefect_managedfiletransfer.delete_files_flow import (
+    matcher_can_only_match_single_file,
+)
+from prefect_managedfiletransfer.delete_file_task import delete_file_task
 from prefect.filesystems import LocalFileSystem
+from importlib import import_module
 import pytest
+import sys
 from pathlib import Path
 
+delete_files_flow_module = import_module(
+    "prefect_managedfiletransfer.delete_files_flow"
+)
+
 pytest_plugins = ("pytest_asyncio",)
+
+
+@pytest.mark.parametrize(
+    "matcher, expected",
+    [
+        (FileMatcher(pattern_to_match="file.txt"), True),
+        (FileMatcher(pattern_to_match="*.txt"), False),
+        (FileMatcher(pattern_to_match="file?.txt"), False),
+        (FileMatcher(pattern_to_match="file[1].txt"), False),
+        (FileMatcher(pattern_to_match="file.txt", minimum_age="1d"), False),
+        (FileMatcher(pattern_to_match="file.txt", maximum_age="1d"), False),
+        (FileMatcher(pattern_to_match="file.txt", skip=1), False),
+        (FileMatcher(pattern_to_match="file.txt", take=0), False),
+        (FileMatcher(pattern_to_match="file.txt", take=1), True),
+    ],
+)
+def test_matcher_can_only_match_single_file(matcher, expected):
+    """Test detection of matchers that can only ever match a single file."""
+    assert matcher_can_only_match_single_file(matcher) is expected
 
 
 @pytest.mark.asyncio
@@ -257,3 +287,263 @@ async def test_delete_files_flow_with_block_name_string(prefect_db, temp_folder_
     assert isinstance(result, list)
     assert len(result) == 1
     assert not file_to_delete.exists(), "File should be deleted"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_bypasses_listing(
+    prefect_db, monkeypatch, temp_file_path
+):
+    """Test that a matcher which can only match a single file skips listing."""
+    source = LocalFileSystem(basepath=temp_file_path.parent)
+
+    async def fail_if_called(*args, **kwargs):
+        raise AssertionError("list_remote_files_task should not have been called")
+
+    monkeypatch.setattr(
+        delete_files_flow_module, "list_remote_files_task", fail_if_called
+    )
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_file_path.parent,
+                pattern_to_match=temp_file_path.name,
+            )
+        ],
+    )
+
+    assert isinstance(result, list)
+    assert len(result) == 1
+    assert not temp_file_path.exists(), "File should be deleted from source folder"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_not_found_is_skipped(
+    prefect_db, monkeypatch, temp_folder_path
+):
+    """Test that a single-file matcher for a missing file skips without listing."""
+    source = LocalFileSystem(basepath=temp_folder_path)
+
+    async def fail_if_called(*args, **kwargs):
+        raise AssertionError("list_remote_files_task should not have been called")
+
+    monkeypatch.setattr(
+        delete_files_flow_module, "list_remote_files_task", fail_if_called
+    )
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match="nonexistent-file.txt",
+            )
+        ],
+        return_state=True,
+    )
+
+    assert isinstance(result, State)
+    assert result.is_completed()
+    assert result.name == "Skipped"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_matching_directory_is_skipped(
+    prefect_db, temp_folder_path
+):
+    """Test that a matcher matching a directory name is skipped, not treated as an
+    error, since directories are not files that can be deleted."""
+    a_directory = temp_folder_path / "a_directory"
+    a_directory.mkdir()
+
+    source = LocalFileSystem(basepath=temp_folder_path)
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match="a_directory",
+            )
+        ],
+        return_state=True,
+    )
+
+    assert isinstance(result, State)
+    assert result.is_completed()
+    assert result.name == "Skipped"
+    assert a_directory.exists(), "Directory should not be deleted"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_locked_file_fails(
+    prefect_db, monkeypatch, temp_folder_path
+):
+    """Test that a file which cannot be deleted while locked for writing fails the
+    flow rather than completing silently."""
+    file_to_delete = temp_folder_path / "locked_file.txt"
+    file_to_delete.write_text("test content")
+
+    source = LocalFileSystem(basepath=temp_folder_path)
+
+    # disable retries/retry delay so the test doesn't have to wait for them
+    no_retry_flow = delete_files_flow.with_options(retries=0, retry_delay_seconds=0)
+    monkeypatch.setattr(
+        delete_files_flow_module,
+        "delete_file_task",
+        delete_file_task.with_options(retries=0, retry_delay_seconds=0),
+    )
+
+    lock_handle = open(file_to_delete, "r+")
+    try:
+        if sys.platform == "win32":
+            # On Windows, an open file handle without shared delete access
+            # prevents the file from being removed.
+            import msvcrt
+
+            msvcrt.locking(lock_handle.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            # POSIX unlink() does not respect advisory locks, so also remove
+            # write permission on the containing folder to ensure the delete
+            # cannot proceed while the file is locked/in-use.
+            import fcntl
+
+            fcntl.flock(lock_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            temp_folder_path.chmod(0o555)
+
+        result = await no_retry_flow(
+            source_block_or_blockname=source,
+            source_file_matchers=[
+                FileMatcher(
+                    source_folder=temp_folder_path,
+                    pattern_to_match=file_to_delete.name,
+                )
+            ],
+            return_state=True,
+        )
+
+        assert isinstance(result, State)
+        assert result.is_failed()
+        assert file_to_delete.exists(), "File should not have been deleted"
+    finally:
+        # release the lock and restore permissions before the file is cleaned up
+        if sys.platform != "win32":
+            temp_folder_path.chmod(0o755)
+        lock_handle.close()
+        file_to_delete.unlink(missing_ok=True)
+
+
+async def _rclone_local_block(name: str) -> RCloneConfigFileBlock:
+    """Create and save an rclone block using the local type remote, so tests can
+    exercise the RCLONE code path against a plain local test folder."""
+    block = RCloneConfigFileBlock(
+        remote_name="test_local",
+        config_file_contents="[test_local]\ntype = local\n",
+    )
+    await block.save(name, overwrite=True)
+    return block
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_rclone_single_file_matcher_bypasses_listing(
+    prefect_db, monkeypatch, temp_folder_path
+):
+    """Test that a matcher which can only match a single file skips listing when
+    using the RClone backend."""
+    file_to_delete = temp_folder_path / "test_rclone.txt"
+    file_to_delete.write_text("test content")
+
+    source = await _rclone_local_block("rclone-single-file-block")
+
+    async def fail_if_called(*args, **kwargs):
+        raise AssertionError("list_remote_files_task should not have been called")
+
+    monkeypatch.setattr(
+        delete_files_flow_module, "list_remote_files_task", fail_if_called
+    )
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match=file_to_delete.name,
+            )
+        ],
+    )
+
+    assert isinstance(result, list)
+    assert len(result) == 1
+    assert not file_to_delete.exists(), "File should be deleted from source folder"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_rclone_can_delete_multiple_files(
+    prefect_db, temp_folder_path
+):
+    """Test deleting multiple files using the RClone backend."""
+    file1 = temp_folder_path / "rclone1.txt"
+    file2 = temp_folder_path / "rclone2.txt"
+    file1.write_text("test content 1")
+    file2.write_text("test content 2")
+
+    source = await _rclone_local_block("rclone-multi-file-block")
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match="rclone*.txt",
+            )
+        ],
+    )
+
+    assert isinstance(result, list)
+    assert len(result) == 2
+    assert not file1.exists(), "File 1 should be deleted"
+    assert not file2.exists(), "File 2 should be deleted"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_rclone_permission_denied_fails(
+    prefect_db, monkeypatch, temp_folder_path
+):
+    """Test that a permission error deleting a file via RClone fails the flow
+    rather than completing silently."""
+    protected_folder = temp_folder_path / "protected"
+    protected_folder.mkdir()
+    file_to_delete = protected_folder / "rclone_protected.txt"
+    file_to_delete.write_text("test content")
+
+    # Remove write permission on the folder so rclone cannot delete the file in it
+    protected_folder.chmod(0o555)
+
+    try:
+        source = await _rclone_local_block("rclone-permission-denied-block")
+
+        # disable retries/retry delay so the test doesn't have to wait for them
+        no_retry_flow = delete_files_flow.with_options(retries=0, retry_delay_seconds=0)
+        monkeypatch.setattr(
+            delete_files_flow_module,
+            "delete_file_task",
+            delete_file_task.with_options(retries=0, retry_delay_seconds=0),
+        )
+
+        result = await no_retry_flow(
+            source_block_or_blockname=source,
+            source_file_matchers=[
+                FileMatcher(
+                    source_folder=protected_folder,
+                    pattern_to_match=file_to_delete.name,
+                )
+            ],
+            return_state=True,
+        )
+
+        assert isinstance(result, State)
+        assert result.is_failed()
+    finally:
+        # restore permissions so the temp folder fixture can clean up afterwards
+        protected_folder.chmod(0o755)
