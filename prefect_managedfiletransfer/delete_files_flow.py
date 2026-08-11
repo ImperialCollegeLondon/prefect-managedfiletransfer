@@ -3,6 +3,7 @@ from pathlib import Path
 from prefect.runtime import flow_run
 from prefect_managedfiletransfer.list_remote_files_task import list_remote_files_task
 from prefect_managedfiletransfer.FileMatcher import FileMatcher
+from prefect_managedfiletransfer.PathUtil import PathUtil
 from prefect_managedfiletransfer.RCloneConfigSavedInPrefect import (
     RCloneConfigSavedInPrefect,
 )

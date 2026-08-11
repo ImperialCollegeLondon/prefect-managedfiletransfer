@@ -20,7 +20,7 @@ async def delete_asset(
     private_key_path: (Path | None) = None,
     rclone_config_file: Path | None = None,
     rclone_config: RCloneConfig | None = None,
-) -> None:
+) -> bool:
     """
     Delete a file from a remote source (SFTP, RClone, or LocalFileSystem).
 
@@ -34,6 +34,9 @@ async def delete_asset(
         private_key_path: The path to the private key file (for SFTP with public/private key auth).
         rclone_config_file: The path to the rclone config file (for RClone).
         rclone_config: The rclone config object (for RClone).
+
+    Returns:
+        bool: True if the file was found and deleted, False if the file did not exist.
     """
 
     if file is None or (hasattr(file, "path") and file.path is None):
@@ -56,11 +59,12 @@ async def delete_asset(
                 logger.warning(
                     f"Local file {file.path} does not exist, skipping deletion"
                 )
-                return
+                return False
 
             logger.debug(f"Deleting local file {file.path}")
             file.path.unlink()
             logger.info(f"Deleted local file {file.path}")
+            return True
 
         case RemoteConnectionType.SFTP:
             transport = None
@@ -83,9 +87,11 @@ async def delete_asset(
                 try:
                     sftp.remove(file.path.name)
                     logger.info(f"Deleted remote file {file.path.name}")
+                    return True
                 except FileNotFoundError:
                     message = f"Remote file {file.path.name} does not exist"
                     logger.warning(message)
+                    return False
 
             finally:
                 if sftp is not None:
@@ -121,6 +127,7 @@ async def delete_asset(
                 )
             else:
                 logger.info(f"Deleted remote file {file.path}")
+                return True
 
         case _:
             logger.critical(f"Unknown remote type {remote_type}")

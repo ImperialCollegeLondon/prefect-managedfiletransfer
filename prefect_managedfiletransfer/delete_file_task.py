@@ -24,7 +24,7 @@ async def delete_file_task(
     source_type: RemoteConnectionType,
     remote_asset: RemoteAsset,
     rclone_config: RCloneConfigSavedInPrefect | None = None,
-) -> Path:
+) -> Path | None:
     """
     Task to delete a single file from a remote source (SFTP, RClone, or LocalFileSystem).
 
@@ -35,7 +35,7 @@ async def delete_file_task(
         rclone_config (RCloneConfigSavedInPrefect | None): The RClone configuration to use for the deletion, if applicable.
 
     Returns:
-        Path: The path of the deleted file.
+        Path | None: The path of the deleted file, or None if the file did not exist.
     """
 
     logger.info(f"Start delete {remote_asset.path}")
@@ -45,7 +45,7 @@ async def delete_file_task(
         if hasattr(source_block, "get_temp_key_file")
         else nullcontext()
     ) as temp_key_file:
-        await delete_asset(
+        deleted = await delete_asset(
             file=remote_asset,
             remote_type=source_type,
             host=source_block.host if hasattr(source_block, "host") else None,
@@ -62,4 +62,4 @@ async def delete_file_task(
             rclone_config=rclone_config,
         )
 
-    return remote_asset.path
+    return remote_asset.path if deleted else None
