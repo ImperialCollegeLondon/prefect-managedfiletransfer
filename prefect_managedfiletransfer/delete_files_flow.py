@@ -101,32 +101,29 @@ async def delete_files_flow(
     )
 
     deleted: list[Path] = []
+    source_files: list[RemoteAsset] = []
+    basepath = source_block.basepath if hasattr(source_block, "basepath") else None
 
-    if len(source_file_matchers) == 1 and matcher_can_only_match_single_file(
-        source_file_matchers[0]
-    ):
-        # bypass listing the source and try to directly delete the single file
-        # that the matcher describes, since it cannot match anything else
-        matcher = source_file_matchers[0]
-        basepath = source_block.basepath if hasattr(source_block, "basepath") else None
-        remote_path = PathUtil.resolve_path(
-            source_type,
-            basepath,
-            matcher.source_folder / matcher.pattern_to_match,
-        )
-        remote_asset = RemoteAsset(path=remote_path, last_modified=reference_date)
+    for matcher in source_file_matchers:
+        if matcher_can_only_match_single_file(matcher):
+            # bypass listing the source and try to directly delete the single file
+            # that the matcher describes, since it cannot match anything else
+            remote_path = PathUtil.resolve_path(
+                source_type,
+                basepath,
+                matcher.source_folder / matcher.pattern_to_match,
+            )
+            remote_asset = RemoteAsset(path=remote_path, last_modified=reference_date)
 
-        deleted_file = await delete_file_task(
-            source_block,
-            source_type,
-            remote_asset,
-            rclone_source_config,
-        )
-        if deleted_file is not None:
-            deleted.append(deleted_file)
-    else:
-        source_files: list[RemoteAsset] = []
-        for matcher in source_file_matchers:
+            deleted_file = await delete_file_task(
+                source_block,
+                source_type,
+                remote_asset,
+                rclone_source_config,
+            )
+            if deleted_file is not None:
+                deleted.append(deleted_file)
+        else:
             files = await list_remote_files_task(
                 source_block,
                 source_type,
@@ -136,15 +133,15 @@ async def delete_files_flow(
             )
             source_files.extend(files)
 
-        for remote_asset in source_files:
-            deleted_file = await delete_file_task(
-                source_block,
-                source_type,
-                remote_asset,
-                rclone_source_config,
-            )
-            if deleted_file is not None:
-                deleted.append(deleted_file)
+    for remote_asset in source_files:
+        deleted_file = await delete_file_task(
+            source_block,
+            source_type,
+            remote_asset,
+            rclone_source_config,
+        )
+        if deleted_file is not None:
+            deleted.append(deleted_file)
 
     logger.info(f"Delete completed. {len(deleted)} files removed")
 
