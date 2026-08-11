@@ -524,9 +524,7 @@ async def test_delete_files_flow_rclone_permission_denied_fails(
         source = await _rclone_local_block("rclone-permission-denied-block")
 
         # disable retries/retry delay so the test doesn't have to wait for them
-        no_retry_flow = delete_files_flow.with_options(
-            retries=0, retry_delay_seconds=0
-        )
+        no_retry_flow = delete_files_flow.with_options(retries=0, retry_delay_seconds=0)
         monkeypatch.setattr(
             delete_files_flow_module,
             "delete_file_task",
