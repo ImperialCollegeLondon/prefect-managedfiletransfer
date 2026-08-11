@@ -7,11 +7,39 @@ from prefect_managedfiletransfer import FileMatcher, delete_files_flow
 from prefect_managedfiletransfer.ServerWithBasicAuthBlock import (
     ServerWithBasicAuthBlock,
 )
+from prefect_managedfiletransfer.delete_files_flow import (
+    matcher_can_only_match_single_file,
+)
+from prefect_managedfiletransfer.delete_file_task import delete_file_task
 from prefect.filesystems import LocalFileSystem
+from importlib import import_module
 import pytest
 from pathlib import Path
 
+delete_files_flow_module = import_module(
+    "prefect_managedfiletransfer.delete_files_flow"
+)
+
 pytest_plugins = ("pytest_asyncio",)
+
+
+@pytest.mark.parametrize(
+    "matcher, expected",
+    [
+        (FileMatcher(pattern_to_match="file.txt"), True),
+        (FileMatcher(pattern_to_match="*.txt"), False),
+        (FileMatcher(pattern_to_match="file?.txt"), False),
+        (FileMatcher(pattern_to_match="file[1].txt"), False),
+        (FileMatcher(pattern_to_match="file.txt", minimum_age="1d"), False),
+        (FileMatcher(pattern_to_match="file.txt", maximum_age="1d"), False),
+        (FileMatcher(pattern_to_match="file.txt", skip=1), False),
+        (FileMatcher(pattern_to_match="file.txt", take=0), False),
+        (FileMatcher(pattern_to_match="file.txt", take=1), True),
+    ],
+)
+def test_matcher_can_only_match_single_file(matcher, expected):
+    """Test detection of matchers that can only ever match a single file."""
+    assert matcher_can_only_match_single_file(matcher) is expected
 
 
 @pytest.mark.asyncio
@@ -257,3 +285,124 @@ async def test_delete_files_flow_with_block_name_string(prefect_db, temp_folder_
     assert isinstance(result, list)
     assert len(result) == 1
     assert not file_to_delete.exists(), "File should be deleted"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_bypasses_listing(
+    prefect_db, monkeypatch, temp_file_path
+):
+    """Test that a matcher which can only match a single file skips listing."""
+    source = LocalFileSystem(basepath=temp_file_path.parent)
+
+    async def fail_if_called(*args, **kwargs):
+        raise AssertionError("list_remote_files_task should not have been called")
+
+    monkeypatch.setattr(
+        delete_files_flow_module, "list_remote_files_task", fail_if_called
+    )
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_file_path.parent,
+                pattern_to_match=temp_file_path.name,
+            )
+        ],
+    )
+
+    assert isinstance(result, list)
+    assert len(result) == 1
+    assert not temp_file_path.exists(), "File should be deleted from source folder"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_not_found_is_skipped(
+    prefect_db, monkeypatch, temp_folder_path
+):
+    """Test that a single-file matcher for a missing file skips without listing."""
+    source = LocalFileSystem(basepath=temp_folder_path)
+
+    async def fail_if_called(*args, **kwargs):
+        raise AssertionError("list_remote_files_task should not have been called")
+
+    monkeypatch.setattr(
+        delete_files_flow_module, "list_remote_files_task", fail_if_called
+    )
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match="nonexistent-file.txt",
+            )
+        ],
+        return_state=True,
+    )
+
+    assert isinstance(result, State)
+    assert result.is_completed()
+    assert result.name == "Skipped"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_wildcard_matcher_still_lists(
+    prefect_db, temp_folder_path
+):
+    """Test that a matcher with a wildcard pattern still uses the listing step."""
+    file1 = temp_folder_path / "test1.txt"
+    file2 = temp_folder_path / "test2.txt"
+    file1.write_text("test content 1")
+    file2.write_text("test content 2")
+
+    source = LocalFileSystem(basepath=temp_folder_path)
+
+    result = await delete_files_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match="*.txt",
+            )
+        ],
+    )
+
+    assert isinstance(result, list)
+    assert len(result) == 2
+    assert not file1.exists()
+    assert not file2.exists()
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_error_propagates(
+    prefect_db, monkeypatch, temp_folder_path
+):
+    """Test that an error deleting a single-file matcher target fails the flow."""
+    # A directory cannot be removed with unlink(), so this simulates a delete error
+    a_directory = temp_folder_path / "a_directory"
+    a_directory.mkdir()
+
+    source = LocalFileSystem(basepath=temp_folder_path)
+
+    # disable retries/retry delay so the test doesn't have to wait for them
+    no_retry_flow = delete_files_flow.with_options(retries=0, retry_delay_seconds=0)
+    monkeypatch.setattr(
+        delete_files_flow_module,
+        "delete_file_task",
+        delete_file_task.with_options(retries=0, retry_delay_seconds=0),
+    )
+
+    result = await no_retry_flow(
+        source_block_or_blockname=source,
+        source_file_matchers=[
+            FileMatcher(
+                source_folder=temp_folder_path,
+                pattern_to_match="a_directory",
+            )
+        ],
+        return_state=True,
+    )
+
+    assert isinstance(result, State)
+    assert result.is_failed()

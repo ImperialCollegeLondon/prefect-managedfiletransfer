@@ -100,26 +100,51 @@ async def delete_files_flow(
         else None
     )
 
-    source_files: list[RemoteAsset] = []
-    for matcher in source_file_matchers:
-        files = await list_remote_files_task(
-            source_block,
-            source_type,
-            matcher,
-            rclone_source_config,
-            reference_date,
-        )
-        source_files.extend(files)
+    deleted: list[Path] = []
 
-    deleted = []
-    for remote_asset in source_files:
+    if len(source_file_matchers) == 1 and matcher_can_only_match_single_file(
+        source_file_matchers[0]
+    ):
+        # bypass listing the source and try to directly delete the single file
+        # that the matcher describes, since it cannot match anything else
+        matcher = source_file_matchers[0]
+        basepath = source_block.basepath if hasattr(source_block, "basepath") else None
+        remote_path = PathUtil.resolve_path(
+            source_type,
+            basepath,
+            matcher.source_folder / matcher.pattern_to_match,
+        )
+        remote_asset = RemoteAsset(path=remote_path, last_modified=reference_date)
+
         deleted_file = await delete_file_task(
             source_block,
             source_type,
             remote_asset,
             rclone_source_config,
         )
-        deleted.append(deleted_file)
+        if deleted_file is not None:
+            deleted.append(deleted_file)
+    else:
+        source_files: list[RemoteAsset] = []
+        for matcher in source_file_matchers:
+            files = await list_remote_files_task(
+                source_block,
+                source_type,
+                matcher,
+                rclone_source_config,
+                reference_date,
+            )
+            source_files.extend(files)
+
+        for remote_asset in source_files:
+            deleted_file = await delete_file_task(
+                source_block,
+                source_type,
+                remote_asset,
+                rclone_source_config,
+            )
+            if deleted_file is not None:
+                deleted.append(deleted_file)
 
     logger.info(f"Delete completed. {len(deleted)} files removed")
 
@@ -130,6 +155,31 @@ async def delete_files_flow(
         )
 
     return deleted
+
+
+def matcher_can_only_match_single_file(matcher: FileMatcher) -> bool:
+    """
+    Determine whether a FileMatcher can only ever match a single, specific file, so
+    that listing the source folder can be safely skipped and the file can be deleted
+    directly.
+
+    Args:
+        matcher: The FileMatcher to check.
+
+    Returns:
+        True if the matcher's pattern_to_match is a literal filename (no glob
+        wildcards) and none of the other matcher options (age filters, skip, take)
+        could cause the single matching file to be filtered out.
+    """
+    has_wildcard = any(char in matcher.pattern_to_match for char in "*?[")
+
+    return (
+        not has_wildcard
+        and matcher.minimum_age is None
+        and matcher.maximum_age is None
+        and matcher.skip == 0
+        and matcher.take != 0
+    )
 
 
 def map_block_to_remote_type(source_block):

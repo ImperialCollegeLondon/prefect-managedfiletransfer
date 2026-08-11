@@ -125,6 +125,11 @@ async def delete_asset(
                 raise RuntimeError(
                     f"Failed to delete remote file {file.path} with rclone, return code {return_code}"
                 )
+            elif return_code != 0:
+                logger.warning(
+                    f"Remote file {file.path} does not exist, skipping deletion"
+                )
+                return False
             else:
                 logger.info(f"Deleted remote file {file.path}")
                 return True
