@@ -27,21 +27,27 @@ jobs:
     if: needs.check-actor.outputs.is-dependabot == 'true'
     steps:
       - name: Request Copilot code review
+        id: request-review
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
         run: |
-          gh api \
+          if gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "/repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
-            -f "reviewers[]=copilot-pull-request-reviewer" \
-            || echo "Copilot reviewer request failed or already requested – continuing"
+            -f "reviewers[]=copilot-pull-request-reviewer"; then
+            echo "requested=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Copilot reviewer request failed or already requested – skipping wait."
+            echo "requested=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Wait for Copilot review (up to 10 minutes)
         id: await-review
+        if: steps.request-review.outputs.requested == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
