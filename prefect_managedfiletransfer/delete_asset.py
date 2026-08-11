@@ -55,9 +55,10 @@ async def delete_asset(
 
     match remote_type:
         case RemoteConnectionType.LOCAL:
-            if not file.path.exists():
+            if not file.path.is_file():
                 logger.warning(
-                    f"Local file {file.path} does not exist, skipping deletion"
+                    f"Local file {file.path} is not a regular file "
+                    "(does not exist or is a directory), skipping deletion"
                 )
                 return False
 

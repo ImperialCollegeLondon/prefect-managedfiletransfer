@@ -106,23 +106,16 @@ async def delete_files_flow(
 
     for matcher in source_file_matchers:
         if matcher_can_only_match_single_file(matcher):
-            # bypass listing the source and try to directly delete the single file
-            # that the matcher describes, since it cannot match anything else
+            # bypass listing the source, since the matcher cannot match anything
+            # other than this single file - it will be deleted in the loop below
             remote_path = PathUtil.resolve_path(
                 source_type,
                 basepath,
                 matcher.source_folder / matcher.pattern_to_match,
             )
-            remote_asset = RemoteAsset(path=remote_path, last_modified=reference_date)
-
-            deleted_file = await delete_file_task(
-                source_block,
-                source_type,
-                remote_asset,
-                rclone_source_config,
+            source_files.append(
+                RemoteAsset(path=remote_path, last_modified=reference_date)
             )
-            if deleted_file is not None:
-                deleted.append(deleted_file)
         else:
             files = await list_remote_files_task(
                 source_block,

@@ -15,6 +15,7 @@ from prefect_managedfiletransfer.delete_file_task import delete_file_task
 from prefect.filesystems import LocalFileSystem
 from importlib import import_module
 import pytest
+import sys
 from pathlib import Path
 
 delete_files_flow_module = import_module(
@@ -348,25 +349,17 @@ async def test_delete_files_flow_single_file_matcher_not_found_is_skipped(
 
 
 @pytest.mark.asyncio
-async def test_delete_files_flow_single_file_matcher_error_propagates(
-    prefect_db, monkeypatch, temp_folder_path
+async def test_delete_files_flow_single_file_matcher_matching_directory_is_skipped(
+    prefect_db, temp_folder_path
 ):
-    """Test that an error deleting a single-file matcher target fails the flow."""
-    # A directory cannot be removed with unlink(), so this simulates a delete error
+    """Test that a matcher matching a directory name is skipped, not treated as an
+    error, since directories are not files that can be deleted."""
     a_directory = temp_folder_path / "a_directory"
     a_directory.mkdir()
 
     source = LocalFileSystem(basepath=temp_folder_path)
 
-    # disable retries/retry delay so the test doesn't have to wait for them
-    no_retry_flow = delete_files_flow.with_options(retries=0, retry_delay_seconds=0)
-    monkeypatch.setattr(
-        delete_files_flow_module,
-        "delete_file_task",
-        delete_file_task.with_options(retries=0, retry_delay_seconds=0),
-    )
-
-    result = await no_retry_flow(
+    result = await delete_files_flow(
         source_block_or_blockname=source,
         source_file_matchers=[
             FileMatcher(
@@ -378,7 +371,67 @@ async def test_delete_files_flow_single_file_matcher_error_propagates(
     )
 
     assert isinstance(result, State)
-    assert result.is_failed()
+    assert result.is_completed()
+    assert result.name == "Skipped"
+    assert a_directory.exists(), "Directory should not be deleted"
+
+
+@pytest.mark.asyncio
+async def test_delete_files_flow_single_file_matcher_locked_file_fails(
+    prefect_db, monkeypatch, temp_folder_path
+):
+    """Test that a file which cannot be deleted while locked for writing fails the
+    flow rather than completing silently."""
+    file_to_delete = temp_folder_path / "locked_file.txt"
+    file_to_delete.write_text("test content")
+
+    source = LocalFileSystem(basepath=temp_folder_path)
+
+    # disable retries/retry delay so the test doesn't have to wait for them
+    no_retry_flow = delete_files_flow.with_options(retries=0, retry_delay_seconds=0)
+    monkeypatch.setattr(
+        delete_files_flow_module,
+        "delete_file_task",
+        delete_file_task.with_options(retries=0, retry_delay_seconds=0),
+    )
+
+    lock_handle = open(file_to_delete, "r+")
+    try:
+        if sys.platform == "win32":
+            # On Windows, an open file handle without shared delete access
+            # prevents the file from being removed.
+            import msvcrt
+
+            msvcrt.locking(lock_handle.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            # POSIX unlink() does not respect advisory locks, so also remove
+            # write permission on the containing folder to ensure the delete
+            # cannot proceed while the file is locked/in-use.
+            import fcntl
+
+            fcntl.flock(lock_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            temp_folder_path.chmod(0o555)
+
+        result = await no_retry_flow(
+            source_block_or_blockname=source,
+            source_file_matchers=[
+                FileMatcher(
+                    source_folder=temp_folder_path,
+                    pattern_to_match=file_to_delete.name,
+                )
+            ],
+            return_state=True,
+        )
+
+        assert isinstance(result, State)
+        assert result.is_failed()
+        assert file_to_delete.exists(), "File should not have been deleted"
+    finally:
+        # release the lock and restore permissions before the file is cleaned up
+        if sys.platform != "win32":
+            temp_folder_path.chmod(0o755)
+        lock_handle.close()
+        file_to_delete.unlink(missing_ok=True)
 
 
 async def _rclone_local_block(name: str) -> RCloneConfigFileBlock:
