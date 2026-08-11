@@ -118,18 +118,18 @@ async def delete_asset(
                 )
                 await rclone_config.update_config(config_after)
 
-            if return_code != 0 and type(exception) is not FileNotFoundError:
+            if return_code != 0 and isinstance(exception, FileNotFoundError):
+                logger.info(
+                    f"Remote file {file.path} does not exist, skipping deletion"
+                )
+                return False
+            elif return_code != 0:
                 logger.error(
                     f"Failed to delete remote file {file.path} with rclone, return code {return_code}"
                 )
                 raise RuntimeError(
                     f"Failed to delete remote file {file.path} with rclone, return code {return_code}"
                 )
-            elif return_code != 0 and type(exception) is FileNotFoundError:
-                logger.warning(
-                    f"Remote file {file.path} does not exist, skipping deletion"
-                )
-                return False
             else:
                 logger.info(f"Deleted remote file {file.path}")
                 return True
