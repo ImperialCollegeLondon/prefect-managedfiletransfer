@@ -1646,8 +1646,7 @@ Returns:
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>prefect_managedfiletransfer/delete_files_flow.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 45</span>
-<span class="normal"> 46</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 46</span>
 <span class="normal"> 47</span>
 <span class="normal"> 48</span>
 <span class="normal"> 49</span>
@@ -1732,7 +1731,23 @@ Returns:
 <span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
-<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@flow</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">FLOW_NAMES</span><span class="o">.</span><span class="n">DELETE_FILES</span><span class="p">,</span>
     <span class="n">log_prints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">flow_run_name</span><span class="o">=</span><span class="n">_generate_flow_run_name</span><span class="p">,</span>
@@ -1789,18 +1804,32 @@ Returns:
         <span class="k">else</span> <span class="kc">None</span>
     <span class="p">)</span>
 
+    <span class="n">deleted</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">source_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RemoteAsset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">matcher</span> <span class="ow">in</span> <span class="n">source_file_matchers</span><span class="p">:</span>
-        <span class="n">files</span> <span class="o">=</span> <span class="k">await</span> <span class="n">list_remote_files_task</span><span class="p">(</span>
-            <span class="n">source_block</span><span class="p">,</span>
-            <span class="n">source_type</span><span class="p">,</span>
-            <span class="n">matcher</span><span class="p">,</span>
-            <span class="n">rclone_source_config</span><span class="p">,</span>
-            <span class="n">reference_date</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">source_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+    <span class="n">basepath</span> <span class="o">=</span> <span class="n">source_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;basepath&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
 
-    <span class="n">deleted</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">matcher</span> <span class="ow">in</span> <span class="n">source_file_matchers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">matcher_can_only_match_single_file</span><span class="p">(</span><span class="n">matcher</span><span class="p">):</span>
+            <span class="c1"># bypass listing the source, since the matcher cannot match anything</span>
+            <span class="c1"># other than this single file - it will be deleted in the loop below</span>
+            <span class="n">remote_path</span> <span class="o">=</span> <span class="n">PathUtil</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span>
+                <span class="n">source_type</span><span class="p">,</span>
+                <span class="n">basepath</span><span class="p">,</span>
+                <span class="n">matcher</span><span class="o">.</span><span class="n">source_folder</span> <span class="o">/</span> <span class="n">matcher</span><span class="o">.</span><span class="n">pattern_to_match</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">source_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">RemoteAsset</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">remote_path</span><span class="p">,</span> <span class="n">last_modified</span><span class="o">=</span><span class="n">reference_date</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="k">await</span> <span class="n">list_remote_files_task</span><span class="p">(</span>
+                <span class="n">source_block</span><span class="p">,</span>
+                <span class="n">source_type</span><span class="p">,</span>
+                <span class="n">matcher</span><span class="p">,</span>
+                <span class="n">rclone_source_config</span><span class="p">,</span>
+                <span class="n">reference_date</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">source_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
     <span class="k">for</span> <span class="n">remote_asset</span> <span class="ow">in</span> <span class="n">source_files</span><span class="p">:</span>
         <span class="n">deleted_file</span> <span class="o">=</span> <span class="k">await</span> <span class="n">delete_file_task</span><span class="p">(</span>
             <span class="n">source_block</span><span class="p">,</span>
@@ -1808,7 +1837,8 @@ Returns:
             <span class="n">remote_asset</span><span class="p">,</span>
             <span class="n">rclone_source_config</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">deleted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">deleted_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deleted_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">deleted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">deleted_file</span><span class="p">)</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Delete completed. </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deleted</span><span class="p">)</span><span class="si">}</span><span class="s2"> files removed&quot;</span><span class="p">)</span>
 
@@ -1819,6 +1849,149 @@ Returns:
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">deleted</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="prefect_managedfiletransfer.delete_files_flow.matcher_can_only_match_single_file" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">matcher_can_only_match_single_file</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Determine whether a FileMatcher can only ever match a single, specific file, so
+that listing the source folder can be safely skipped and the file can be deleted
+directly.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>matcher</code>
+            </td>
+            <td>
+                  <code><span title="prefect_managedfiletransfer.FileMatcher.FileMatcher">FileMatcher</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The FileMatcher to check.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>True if the matcher's pattern_to_match is a literal filename (no glob</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>wildcards) and none of the other matcher options (age filters, skip, take)</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>could cause the single matching file to be filtered out.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>prefect_managedfiletransfer/delete_files_flow.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">matcher_can_only_match_single_file</span><span class="p">(</span><span class="n">matcher</span><span class="p">:</span> <span class="n">FileMatcher</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine whether a FileMatcher can only ever match a single, specific file, so</span>
+<span class="sd">    that listing the source folder can be safely skipped and the file can be deleted</span>
+<span class="sd">    directly.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        matcher: The FileMatcher to check.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if the matcher&#39;s pattern_to_match is a literal filename (no glob</span>
+<span class="sd">        wildcards) and none of the other matcher options (age filters, skip, take)</span>
+<span class="sd">        could cause the single matching file to be filtered out.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">has_wildcard</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">char</span> <span class="ow">in</span> <span class="n">matcher</span><span class="o">.</span><span class="n">pattern_to_match</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="s2">&quot;*?[&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="n">has_wildcard</span>
+        <span class="ow">and</span> <span class="n">matcher</span><span class="o">.</span><span class="n">minimum_age</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">matcher</span><span class="o">.</span><span class="n">maximum_age</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">matcher</span><span class="o">.</span><span class="n">skip</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="ow">and</span> <span class="n">matcher</span><span class="o">.</span><span class="n">take</span> <span class="o">!=</span> <span class="mi">0</span>
+    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
