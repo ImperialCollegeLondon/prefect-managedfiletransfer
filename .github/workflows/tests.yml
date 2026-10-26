@@ -24,13 +24,15 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
 
       - name: Run tests with coverage
         run: |
-          uv run coverage run -m pytest tests -vv
-          uv run coverage report
+          uv run --locked coverage run -m pytest tests -vv
+          uv run --locked coverage report
         env:
           PREFECT_SERVER_DATABASE_CONNECTION_URL: "sqlite+aiosqlite:///./collection-tests.db"
 
-      - run: uv run mkdocs build --verbose --clean
+      - run: uv run --locked mkdocs build --verbose --clean

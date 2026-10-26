@@ -1,91 +1,63 @@
 name: Dependabot Auto-merge
 
+# Trusted workflow: runs with a write token from the base branch.
+# It must NEVER check out, import or execute pull request code.
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  pull_request_target:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  check-actor:
-    name: Check PR actor is dependabot
+  automerge:
+    name: Dependabot auto-merge
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
-    outputs:
-      is-dependabot: ${{ steps.check.outputs.is-dependabot }}
+    if: >-
+      github.actor == 'dependabot[bot]' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.draft == false
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      REPO: ${{ github.repository }}
+      PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
-      - name: Confirm dependabot actor
-        id: check
-        run: echo "is-dependabot=true" >> "$GITHUB_OUTPUT"
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2.5.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  copilot-review:
-    name: Request and await Copilot review
-    runs-on: ubuntu-latest
-    needs: check-actor
-    if: needs.check-actor.outputs.is-dependabot == 'true'
-    steps:
-      - name: Request Copilot code review
-        id: request-review
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
+      # Only patch and minor updates (the highest type for grouped PRs) qualify.
+      # GitHub's required status checks still gate the actual merge.
+      - name: Enable auto-merge for patch and minor updates
+        if: >-
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
         run: |
-          if gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
-            -f "reviewers[]=copilot-pull-request-reviewer"; then
-            echo "requested=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "Copilot reviewer request failed or already requested – skipping wait."
-            echo "requested=false" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          gh pr merge "$PR_NUMBER" --repo "$REPO" --auto --squash \
+            --match-head-commit "$PR_HEAD_SHA"
+          echo "Auto-merge enabled (squash) for PR #${PR_NUMBER}; it will merge once required checks pass." >> "$GITHUB_STEP_SUMMARY"
+
+      # Major, empty and unrecognised update types stay with a human.
+      - name: Leave other updates for human review
+        if: >-
+          steps.metadata.outputs.update-type != 'version-update:semver-patch' &&
+          steps.metadata.outputs.update-type != 'version-update:semver-minor'
+        env:
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+        run: |
+          set -euo pipefail
+          enabled="$(gh pr view "$PR_NUMBER" --repo "$REPO" \
+            --json autoMergeRequest --jq '.autoMergeRequest != null')"
+          if [ "$enabled" = "true" ]; then
+            gh pr merge "$PR_NUMBER" --repo "$REPO" --disable-auto
+            echo "Disabled existing auto-merge on PR #${PR_NUMBER}." >> "$GITHUB_STEP_SUMMARY"
           fi
-
-      - name: Wait for Copilot review (up to 10 minutes)
-        id: await-review
-        if: steps.request-review.outputs.requested == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
-        run: |
-          echo "Waiting for Copilot review on PR #${PR_NUMBER}…"
-          for i in $(seq 1 20); do
-            sleep 30
-            STATE=$(gh api \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "/repos/${REPO}/pulls/${PR_NUMBER}/reviews" \
-              --jq '[.[] | select(.user.login == "copilot-pull-request-reviewer")] | last | .state // "PENDING"')
-            echo "Copilot review state: ${STATE}"
-            if [ "${STATE}" = "APPROVED" ]; then
-              echo "copilot-state=approved" >> "$GITHUB_OUTPUT"
-              exit 0
-            elif [ "${STATE}" = "CHANGES_REQUESTED" ]; then
-              echo "copilot-state=changes_requested" >> "$GITHUB_OUTPUT"
-              echo "::error::Copilot requested changes – aborting auto-merge."
-              exit 1
-            fi
-          done
-          echo "::error::Timed out waiting for Copilot review – aborting auto-merge."
-          exit 1
-
-  auto-merge:
-    name: Auto-merge dependabot PR
-    runs-on: ubuntu-latest
-    needs: copilot-review
-    steps:
-      - name: Enable auto-merge
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
-        run: |
-          gh pr merge "${PR_NUMBER}" \
-            --repo "${REPO}" \
-            --auto \
-            --squash
+          echo "Human review needed for PR #${PR_NUMBER} (update type: '${UPDATE_TYPE:-none}'); not eligible for auto-merge." >> "$GITHUB_STEP_SUMMARY"

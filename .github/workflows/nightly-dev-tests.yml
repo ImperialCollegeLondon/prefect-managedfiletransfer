@@ -25,7 +25,9 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
 
       - name: Run tests
         env:

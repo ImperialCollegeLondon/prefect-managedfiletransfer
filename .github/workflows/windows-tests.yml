@@ -24,10 +24,12 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
 
       - name: Run tests
         env:
           PREFECT_SERVER_DATABASE_CONNECTION_URL: "sqlite+aiosqlite:///./collection-tests.db"
         run: |
-          uv run pytest tests -vv
+          uv run --locked pytest tests -vv
