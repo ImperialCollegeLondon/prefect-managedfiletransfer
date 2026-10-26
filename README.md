@@ -50,7 +50,7 @@ Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-manag
 
 ### Installation - Local
 
-Install `prefect-managedfiletransfer` with `pip`. (Requires an installation of Python 3.10+.)
+Install `prefect-managedfiletransfer` with `pip`. (Requires an installation of Python 3.11+.)
 
 ```bash
 pip install prefect-managedfiletransfer

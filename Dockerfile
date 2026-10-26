@@ -11,14 +11,17 @@ ENV UV_SYSTEM_PYTHON=1
 
 # Install system requirements - see https://github.com/PrefectHQ/prefect/blob/main/Dockerfile
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install --no-install-recommends -y \
     tini=0.19.* \
     build-essential \
     git=1:2.* \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install UV from official image - pin to specific version for build caching
-COPY --from=ghcr.io/astral-sh/uv:0.11.23 /uv /bin/uv
+# Install the latest uv from the official image.
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+RUN uv pip install --system --upgrade pip
 
 WORKDIR /app
 
