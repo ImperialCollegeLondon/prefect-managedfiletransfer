@@ -29,7 +29,9 @@ jobs:
         with:
           enable-cache: true
           python-version: 3.12
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
 
       - run: uv build
 
@@ -118,10 +120,12 @@ jobs:
         with:
           enable-cache: true
           python-version: 3.12
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
 
       - run: >
-               uv run mkdocs build
+               uv run --locked mkdocs build
 
       - name: Publish docs
         uses: JamesIves/github-pages-deploy-action@v4.9.0

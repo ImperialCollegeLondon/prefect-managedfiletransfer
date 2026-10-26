@@ -189,3 +189,12 @@ pre-commit install
 ```
 9. Use `./run_local.sh` to deploy a local prefect server, worker, and UI to test your changes
 10. `git commit`, `git push`, and create a pull request
+
+### Dependency management and CI security
+
+- Normal CI runs `uv run --locked`, so dependency changes must include a `uv.lock` generated with `uv lock`.
+- The nightly dev-tests workflow intentionally runs `uv add` against Prefect's `main` branch and tests that changed dependency set, so it does not require the committed lock.
+- Dependabot checks uv (including transitive dependencies and `uv.lock`), Docker and GitHub Actions daily.
+- Patch and minor Dependabot updates are set to auto-merge (squash) once required checks pass. Major updates (including groups containing a major) are left for human review; this workflow does not itself enforce an approval requirement.
+- CodeQL scans run on pull requests, pushes to `main` and weekly (Mondays 06:00 UTC). Dependency review runs on pull requests and fails on vulnerabilities of any severity.
+- The `main` ruleset currently requires `Run Tests (3.12)`, `Run Tests (3.13)` and `Pre-commit checks`. The new scan workflows are not merge gates until a repository administrator adds their job contexts as required checks. Expected contexts are `Analyze (python)` and `Dependency review`; verify the actual names in GitHub first. Dependency review also needs the dependency graph enabled, and its data should cover `uv.lock`.
