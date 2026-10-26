@@ -48,10 +48,6 @@ Example use cases:
 
 Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer).
 
-The server blocks use the logo hosted on the `docs` branch. Its source is
-`docs/img/managed-file-transfer.png`; keep it there so subsequent documentation
-deployments preserve the public image URL.
-
 ### Installation - Local
 
 Install `prefect-managedfiletransfer` with `pip`. (Requires an installation of Python 3.10+.)
