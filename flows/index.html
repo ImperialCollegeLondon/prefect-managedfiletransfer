@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -29,10 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -860,7 +860,7 @@ Returns:
     <span class="p">),</span>
     <span class="n">source_file_matchers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileMatcher</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">FileMatcher</span><span class="p">()],</span>
     <span class="n">path_mapping</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileToFolderMapping</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-    <span class="n">destination_folder</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
+    <span class="n">destination_folder</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"."</span><span class="p">),</span>
     <span class="n">update_only_if_newer_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">check_for_space</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -868,7 +868,7 @@ Returns:
     <span class="n">mode</span><span class="p">:</span> <span class="n">TransferType</span> <span class="o">=</span> <span class="n">TransferType</span><span class="o">.</span><span class="n">Copy</span><span class="p">,</span>
     <span class="n">reference_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">|</span> <span class="n">State</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Transfers files from a source to a destination based on the provided matchers and mapping.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        source_block_or_blockname: The source block or block name to transfer files from.</span>
@@ -884,18 +884,18 @@ Returns:
 <span class="sd">        reference_date: defaults to now() in UTC - used to filter files based on modification time, and for pattern replacement in file names</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        A list of the Paths of transferred files.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">source_file_matchers</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No source file matchers provided&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No source file matchers provided"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">reference_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">reference_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">source_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Source block or blockname is missing&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Source block or blockname is missing"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">destination_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Destination block or blockname is missing&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Destination block or blockname is missing"</span><span class="p">)</span>
 
     <span class="n">source_block</span><span class="p">:</span> <span class="p">(</span>
         <span class="n">ServerWithBasicAuthBlock</span>
@@ -924,7 +924,7 @@ Returns:
         <span class="n">destination_block</span><span class="p">,</span> <span class="n">LocalFileSystem</span>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;Cannot transfer files between two remote file systems. One must be local.&quot;</span>
+            <span class="s2">"Cannot transfer files between two remote file systems. One must be local."</span>
         <span class="p">)</span>
 
     <span class="n">source_type</span> <span class="o">=</span> <span class="n">map_block_to_remote_type</span><span class="p">(</span><span class="n">source_block</span><span class="p">)</span>
@@ -952,7 +952,7 @@ Returns:
         <span class="n">source_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
 
     <span class="n">basepath_str</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">destination_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">&quot;basepath&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">destination_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">"basepath"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="p">)</span>
 
     <span class="n">resolved_destination_with_basepath</span> <span class="o">=</span> <span class="n">PathUtil</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span>
@@ -996,11 +996,11 @@ Returns:
             <span class="p">)</span>
             <span class="n">transferred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upload_result</span><span class="p">)</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transfer completed. </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transferred</span><span class="p">)</span><span class="si">}</span><span class="s2"> files processed&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Transfer completed. </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transferred</span><span class="p">)</span><span class="si">}</span><span class="s2"> files processed"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transferred</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Completed</span><span class="p">(</span>
-            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;No files to transfer&quot;</span><span class="p">,</span>
+            <span class="n">message</span><span class="o">=</span><span class="s2">"No files to transfer"</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">SKIPPED_STATE_NAME</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1369,12 +1369,12 @@ Returns:
     <span class="n">mode</span><span class="p">:</span> <span class="n">TransferType</span> <span class="o">=</span> <span class="n">TransferType</span><span class="o">.</span><span class="n">Copy</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Publish a single file to a destination, e.g. upload an image to a website or copy a file to a local shared public folder</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        source_folder (Path): The folder where the file to upload is located.</span>
-<span class="sd">        pattern_to_upload (str): The pattern of the file to upload, e.g. &quot;*.jpg&quot;.</span>
+<span class="sd">        pattern_to_upload (str): The pattern of the file to upload, e.g. "*.jpg".</span>
 <span class="sd">        destination_file (Path): The destination file path where the file will be uploaded.</span>
 <span class="sd">        destination_block_or_blockname (ServerWithBasicAuthBlock | ServerWithPublicKeyAuthBlock | LocalFileSystem | RCloneConfigFileBlock | str): The destination block or block name where the file will be uploaded.</span>
 <span class="sd">        update_only_if_newer_mode (bool): If true, skip files that are newer on the destination.</span>
@@ -1391,7 +1391,7 @@ Returns:
 <span class="sd">        FileExistsError: If the destination file already exists and overwrite is False.</span>
 <span class="sd">        RuntimeError: if the upload occured but the sizes do not match, indicating a potential issue with the upload process.</span>
 <span class="sd">        RuntimeError: if the upload fails with a non-zero exit code.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">logger</span> <span class="o">=</span> <span class="n">get_run_logger</span><span class="p">()</span>
 
@@ -1400,7 +1400,7 @@ Returns:
     <span class="n">local_details</span><span class="p">:</span> <span class="n">LocalFileSystem</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">destination_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Destination block or blockname is missing&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Destination block or blockname is missing"</span><span class="p">)</span>
 
     <span class="n">destination_block</span><span class="p">:</span> <span class="p">(</span>
         <span class="n">ServerWithBasicAuthBlock</span>
@@ -1416,9 +1416,9 @@ Returns:
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">ServerWithBasicAuthBlock</span><span class="p">):</span>
         <span class="n">sftp_details</span> <span class="o">=</span> <span class="n">destination_block</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sftp_details</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;One or more SFTP server details are missing&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"One or more SFTP server details are missing"</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">sftp_details</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">sftp_details</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
             <span class="n">source_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
@@ -1436,9 +1436,9 @@ Returns:
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">ServerWithPublicKeyAuthBlock</span><span class="p">):</span>
         <span class="n">sftp_details_public_key</span> <span class="o">=</span> <span class="n">destination_block</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;One or more SFTP server details are missing&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"One or more SFTP server details are missing"</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2"> with pub/private keys&quot;</span>
+            <span class="sa">f</span><span class="s2">"Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2"> with pub/private keys"</span>
         <span class="p">)</span>
         <span class="k">with</span> <span class="n">sftp_details_public_key</span><span class="o">.</span><span class="n">get_temp_key_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_key_file</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
@@ -1457,10 +1457,10 @@ Returns:
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">LocalFileSystem</span><span class="p">):</span>
         <span class="n">local_details</span> <span class="o">=</span> <span class="n">destination_block</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">local_details</span><span class="o">.</span><span class="n">basepath</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;LocalFileSystem.basepath details are missing&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using basepath from local filesystem: </span><span class="si">{</span><span class="n">local_details</span><span class="o">.</span><span class="n">basepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"LocalFileSystem.basepath details are missing"</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Using basepath from local filesystem: </span><span class="si">{</span><span class="n">local_details</span><span class="o">.</span><span class="n">basepath</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">destination_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">local_details</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span> <span class="o">/</span> <span class="n">destination_file</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uploading to local filesystem: </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Uploading to local filesystem: </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
             <span class="n">source_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
             <span class="n">pattern_to_upload</span><span class="o">=</span><span class="n">pattern_to_upload</span><span class="p">,</span>
@@ -1473,7 +1473,7 @@ Returns:
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="n">RCloneConfigFileBlock</span><span class="p">):</span>
         <span class="n">rclone_details_prefect_block</span><span class="p">:</span> <span class="n">RCloneConfigFileBlock</span> <span class="o">=</span> <span class="n">destination_block</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> using rclone block for remote </span><span class="si">{</span><span class="n">rclone_details_prefect_block</span><span class="o">.</span><span class="n">remote_name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Uploading </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2"> using rclone block for remote </span><span class="si">{</span><span class="n">rclone_details_prefect_block</span><span class="o">.</span><span class="n">remote_name</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
@@ -1489,10 +1489,10 @@ Returns:
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Destination details are missing&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Destination details are missing"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Failed to upload </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2">. Exit code </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Failed to upload </span><span class="si">{</span><span class="n">pattern_to_upload</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">destination_file</span><span class="si">}</span><span class="s2">. Exit code </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -1766,7 +1766,7 @@ Returns:
     <span class="n">source_file_matchers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FileMatcher</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">FileMatcher</span><span class="p">()],</span>
     <span class="n">reference_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">|</span> <span class="n">State</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Deletes files from a source based on the provided matchers.</span>
 
 <span class="sd">    Args:</span>
@@ -1776,15 +1776,15 @@ Returns:
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A list of the Paths of deleted files.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">source_file_matchers</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No source file matchers provided&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No source file matchers provided"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">reference_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">reference_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">source_block_or_blockname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Source block or blockname is missing&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Source block or blockname is missing"</span><span class="p">)</span>
 
     <span class="n">source_block</span><span class="p">:</span> <span class="p">(</span>
         <span class="n">ServerWithBasicAuthBlock</span>
@@ -1806,7 +1806,7 @@ Returns:
 
     <span class="n">deleted</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">source_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RemoteAsset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">basepath</span> <span class="o">=</span> <span class="n">source_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;basepath&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">basepath</span> <span class="o">=</span> <span class="n">source_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"basepath"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
 
     <span class="k">for</span> <span class="n">matcher</span> <span class="ow">in</span> <span class="n">source_file_matchers</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">matcher_can_only_match_single_file</span><span class="p">(</span><span class="n">matcher</span><span class="p">):</span>
@@ -1840,11 +1840,11 @@ Returns:
         <span class="k">if</span> <span class="n">deleted_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">deleted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">deleted_file</span><span class="p">)</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Delete completed. </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deleted</span><span class="p">)</span><span class="si">}</span><span class="s2"> files removed&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Delete completed. </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deleted</span><span class="p">)</span><span class="si">}</span><span class="s2"> files removed"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">deleted</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Completed</span><span class="p">(</span>
-            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;No files to delete&quot;</span><span class="p">,</span>
+            <span class="n">message</span><span class="o">=</span><span class="s2">"No files to delete"</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="o">.</span><span class="n">SKIPPED_STATE_NAME</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1970,7 +1970,7 @@ directly.</p>
 <span class="normal">170</span>
 <span class="normal">171</span>
 <span class="normal">172</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">matcher_can_only_match_single_file</span><span class="p">(</span><span class="n">matcher</span><span class="p">:</span> <span class="n">FileMatcher</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Determine whether a FileMatcher can only ever match a single, specific file, so</span>
 <span class="sd">    that listing the source folder can be safely skipped and the file can be deleted</span>
 <span class="sd">    directly.</span>
@@ -1979,11 +1979,11 @@ directly.</p>
 <span class="sd">        matcher: The FileMatcher to check.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        True if the matcher&#39;s pattern_to_match is a literal filename (no glob</span>
+<span class="sd">        True if the matcher's pattern_to_match is a literal filename (no glob</span>
 <span class="sd">        wildcards) and none of the other matcher options (age filters, skip, take)</span>
 <span class="sd">        could cause the single matching file to be filtered out.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">has_wildcard</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">char</span> <span class="ow">in</span> <span class="n">matcher</span><span class="o">.</span><span class="n">pattern_to_match</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="s2">&quot;*?[&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">has_wildcard</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">char</span> <span class="ow">in</span> <span class="n">matcher</span><span class="o">.</span><span class="n">pattern_to_match</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="s2">"*?["</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
         <span class="ow">not</span> <span class="n">has_wildcard</span>
@@ -2057,10 +2057,10 @@ directly.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

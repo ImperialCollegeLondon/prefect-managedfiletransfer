@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -27,10 +27,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -630,8 +630,8 @@
 
 <h1 id="prefect-managed-file-transfer">Prefect Managed File Transfer</h1>
 <p align="center">
-    <!--- Insert a cover image here -->
-    <!--- <br> -->
+    <img src="https://raw.githubusercontent.com/ImperialCollegeLondon/prefect-managedfiletransfer/img/managed-file-transfer.png" alt="Prefect Managed File Transfer: Prefect connected to folders labelled M, F and T" width="160" />
+    <br>
     <a href="https://pypi.python.org/pypi/prefect-managedfiletransfer/" alt="PyPI version">
         <img alt="PyPI" src="https://img.shields.io/pypi/v/prefect-managedfiletransfer?color=0052FF&labelColor=090422"></a>
     <a href="https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer/" alt="Stars">
@@ -674,30 +674,30 @@
 <li>Delete temporary files older than 7 days from a remote server to free up disk space.</li>
 </ul>
 <h3 id="installation-local">Installation - Local</h3>
-<p>Install <code>prefect-managedfiletransfer</code> with <code>pip</code>. (Requires an installation of Python 3.10+.)</p>
+<p>Install <code>prefect-managedfiletransfer</code> with <code>pip</code>. (Requires an installation of Python 3.11+.)</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>prefect-managedfiletransfer
 <span class="c1"># or </span>
 uv<span class="w"> </span>add<span class="w"> </span>prefect-managedfiletransfer
 </code></pre></div>
 <p>We recommend using a Python virtual environment manager such as uv, pipenv, conda or virtualenv.</p>
 <p>In one (venv) terminal start a prefect server with logs enabled</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_LEVEL</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_EXTRA_LOGGERS</span><span class="o">=</span><span class="s2">&quot;prefect_managedfiletransfer&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_LEVEL</span><span class="o">=</span><span class="s2">"INFO"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_EXTRA_LOGGERS</span><span class="o">=</span><span class="s2">"prefect_managedfiletransfer"</span>
 prefect<span class="w"> </span>server<span class="w"> </span>start
 <span class="c1"># OR uv run prefect server start</span>
 </code></pre></div>
 <p>There are many ways to manage infrastructure and code with prefect - here we demonstate starting a local worker:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_API_URL</span><span class="o">=</span>http://127.0.0.1:4200/api
 <span class="c1"># or perhaps export PREFECT_API_URL=http://host.docker.internal:4200/api</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_EXTRA_LOGGERS</span><span class="o">=</span><span class="s2">&quot;prefect_managedfiletransfer&quot;</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_LEVEL</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span>
-<span class="c1"># [Optional] add all logs: export PREFECT_LOGGING_ROOT_LEVEL=&quot;INFO&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_EXTRA_LOGGERS</span><span class="o">=</span><span class="s2">"prefect_managedfiletransfer"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PREFECT_LOGGING_LEVEL</span><span class="o">=</span><span class="s2">"INFO"</span>
+<span class="c1"># [Optional] add all logs: export PREFECT_LOGGING_ROOT_LEVEL="INFO"</span>
 
 
-prefect<span class="w"> </span>worker<span class="w"> </span>start<span class="w"> </span>--pool<span class="w"> </span><span class="s1">&#39;default-pool&#39;</span><span class="w"> </span>--type<span class="w"> </span>process
+prefect<span class="w"> </span>worker<span class="w"> </span>start<span class="w"> </span>--pool<span class="w"> </span><span class="s1">'default-pool'</span><span class="w"> </span>--type<span class="w"> </span>process
 
 <span class="c1"># OR add a worker with config to spawn containers that can talk to the server API:</span>
-<span class="nv">PREFECT_API_URL</span><span class="o">=</span>http://host.docker.internal:4200/api<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>prefect<span class="w"> </span>worker<span class="w"> </span>start<span class="w"> </span>--pool<span class="w"> </span><span class="s1">&#39;default-pool&#39;</span><span class="w"> </span>--type<span class="o">=</span>docker<span class="w">  </span>
+<span class="nv">PREFECT_API_URL</span><span class="o">=</span>http://host.docker.internal:4200/api<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>prefect<span class="w"> </span>worker<span class="w"> </span>start<span class="w"> </span>--pool<span class="w"> </span><span class="s1">'default-pool'</span><span class="w"> </span>--type<span class="o">=</span>docker<span class="w">  </span>
 </code></pre></div>
 <p>Install the blocks using the prefect CLI</p>
 <div class="highlight"><pre><span></span><code>prefect<span class="w"> </span>block<span class="w"> </span>register<span class="w"> </span>-m<span class="w"> </span>prefect_managedfiletransfer
@@ -824,10 +824,10 @@ prefect server start
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

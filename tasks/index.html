@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -27,10 +27,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -805,7 +805,7 @@
     <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
     <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>
-    <span class="n">task_run_name</span><span class="o">=</span><span class="s2">&quot;delete-</span><span class="si">{remote_asset.path}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">task_run_name</span><span class="o">=</span><span class="s2">"delete-</span><span class="si">{remote_asset.path}</span><span class="s2">"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_file_task</span><span class="p">(</span>
     <span class="n">source_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
@@ -813,7 +813,7 @@
     <span class="n">remote_asset</span><span class="p">:</span> <span class="n">RemoteAsset</span><span class="p">,</span>
     <span class="n">rclone_config</span><span class="p">:</span> <span class="n">RCloneConfigSavedInPrefect</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Task to delete a single file from a remote source (SFTP, RClone, or LocalFileSystem).</span>
 
 <span class="sd">    Args:</span>
@@ -824,26 +824,26 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Path | None: The path of the deleted file, or None if the file did not exist.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start delete </span><span class="si">{</span><span class="n">remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Start delete </span><span class="si">{</span><span class="n">remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="p">(</span>
         <span class="n">source_block</span><span class="o">.</span><span class="n">get_temp_key_file</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;get_temp_key_file&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"get_temp_key_file"</span><span class="p">)</span>
         <span class="k">else</span> <span class="n">nullcontext</span><span class="p">()</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">temp_key_file</span><span class="p">:</span>
         <span class="n">deleted</span> <span class="o">=</span> <span class="k">await</span> <span class="n">delete_asset</span><span class="p">(</span>
             <span class="n">file</span><span class="o">=</span><span class="n">remote_asset</span><span class="p">,</span>
             <span class="n">remote_type</span><span class="o">=</span><span class="n">source_type</span><span class="p">,</span>
-            <span class="n">host</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"host"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"port"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">username</span><span class="o">=</span><span class="p">(</span>
-                <span class="n">source_block</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;username&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">source_block</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"username"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">password</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">get_password_value</span><span class="p">(</span><span class="n">source_block</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"password"</span><span class="p">)</span>
                 <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">private_key_path</span><span class="o">=</span><span class="p">(</span><span class="n">temp_key_file</span><span class="o">.</span><span class="n">get_path</span><span class="p">()</span> <span class="k">if</span> <span class="n">temp_key_file</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
@@ -1011,7 +1011,7 @@ Returns:
     <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
     <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>
-    <span class="n">task_run_name</span><span class="o">=</span><span class="s2">&quot;download-</span><span class="si">{remote_asset.path}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">task_run_name</span><span class="o">=</span><span class="s2">"download-</span><span class="si">{remote_asset.path}</span><span class="s2">"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">download_file_task</span><span class="p">(</span>
     <span class="n">source_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
@@ -1026,7 +1026,7 @@ Returns:
     <span class="n">check_for_space_overhead</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">reference_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AssetDownloadResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Task to download a single file from a remote source (SFTP, RClone, or LocalFileSystem) to a local path</span>
 <span class="sd">    Args:</span>
 <span class="sd">        source_block (TransferBlockType): The block representing the source connection.</span>
@@ -1042,30 +1042,30 @@ Returns:
 <span class="sd">        reference_date (datetime | None): The reference date to use for checking file modification times. Defaults to None, which uses the current time.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        AssetDownloadResult: The result of the download operation, including success status and any error messages.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start download </span><span class="si">{</span><span class="n">remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">target_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Start download </span><span class="si">{</span><span class="n">remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">target_file_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">reference_date</span><span class="p">:</span>
         <span class="n">reference_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="p">(</span>
         <span class="n">source_block</span><span class="o">.</span><span class="n">get_temp_key_file</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;get_temp_key_file&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"get_temp_key_file"</span><span class="p">)</span>
         <span class="k">else</span> <span class="n">nullcontext</span><span class="p">()</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">temp_key_file</span><span class="p">:</span>
         <span class="n">download_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">download_asset</span><span class="p">(</span>
             <span class="n">file</span><span class="o">=</span><span class="n">remote_asset</span><span class="p">,</span>
             <span class="n">destination_path</span><span class="o">=</span><span class="n">target_file_path</span><span class="p">,</span>
             <span class="n">remote_type</span><span class="o">=</span><span class="n">source_type</span><span class="p">,</span>
-            <span class="n">host</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"host"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"port"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">username</span><span class="o">=</span><span class="p">(</span>
-                <span class="n">source_block</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;username&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">source_block</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"username"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">password</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">get_password_value</span><span class="p">(</span><span class="n">source_block</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"password"</span><span class="p">)</span>
                 <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">private_key_path</span><span class="o">=</span><span class="p">(</span><span class="n">temp_key_file</span><span class="o">.</span><span class="n">get_path</span><span class="p">()</span> <span class="k">if</span> <span class="n">temp_key_file</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
@@ -1079,7 +1079,7 @@ Returns:
         <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">download_result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Failed to download </span><span class="si">{</span><span class="n">remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">download_result</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Failed to download </span><span class="si">{</span><span class="n">remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">download_result</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">download_result</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
 
@@ -1335,7 +1335,7 @@ Returns:
 <span class="normal">88</span>
 <span class="normal">89</span>
 <span class="normal">90</span>
-<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@task</span><span class="p">(</span><span class="n">task_run_name</span><span class="o">=</span><span class="s2">&quot;list_</span><span class="si">{matcher.source_folder}</span><span class="s2">_</span><span class="si">{matcher.pattern_to_match}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@task</span><span class="p">(</span><span class="n">task_run_name</span><span class="o">=</span><span class="s2">"list_</span><span class="si">{matcher.source_folder}</span><span class="s2">_</span><span class="si">{matcher.pattern_to_match}</span><span class="s2">"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_remote_files_task</span><span class="p">(</span>
     <span class="n">source_block</span><span class="p">:</span> <span class="n">TransferBlockType</span><span class="p">,</span>
     <span class="n">source_type</span><span class="p">:</span> <span class="n">RemoteConnectionType</span><span class="p">,</span>
@@ -1343,7 +1343,7 @@ Returns:
     <span class="n">rclone_config</span><span class="p">:</span> <span class="n">RCloneConfigSavedInPrefect</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">reference_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">RemoteAsset</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Task to list remote files based on a matcher. Remote can be SFTP, RClone, or LocalFileSystem.</span>
 
 <span class="sd">    Args:</span>
@@ -1355,9 +1355,9 @@ Returns:
 
 <span class="sd">    Returns:</span>
 <span class="sd">        list[RemoteAsset]: A list of RemoteAsset objects that match the given pattern.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">basepath_str</span> <span class="o">=</span> <span class="n">source_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;basepath&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">basepath_str</span> <span class="o">=</span> <span class="n">source_block</span><span class="o">.</span><span class="n">basepath</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"basepath"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="n">remote_source_path</span> <span class="o">=</span> <span class="n">PathUtil</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span>
         <span class="n">source_type</span><span class="p">,</span> <span class="n">basepath_str</span><span class="p">,</span> <span class="n">matcher</span><span class="o">.</span><span class="n">source_folder</span>
     <span class="p">)</span>
@@ -1365,26 +1365,26 @@ Returns:
     <span class="k">if</span> <span class="n">reference_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">reference_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Listing remote files in </span><span class="si">{</span><span class="n">remote_source_path</span><span class="si">}</span><span class="s2"> with matcher </span><span class="si">{</span><span class="n">matcher</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Listing remote files in </span><span class="si">{</span><span class="n">remote_source_path</span><span class="si">}</span><span class="s2"> with matcher </span><span class="si">{</span><span class="n">matcher</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RemoteAsset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">with</span> <span class="p">(</span>
         <span class="n">source_block</span><span class="o">.</span><span class="n">get_temp_key_file</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;get_temp_key_file&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"get_temp_key_file"</span><span class="p">)</span>
         <span class="k">else</span> <span class="n">nullcontext</span><span class="p">()</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">temp_key_file</span><span class="p">:</span>
         <span class="n">found</span> <span class="o">=</span> <span class="k">await</span> <span class="n">list_remote_assets</span><span class="p">(</span>
             <span class="n">remote_folder</span><span class="o">=</span><span class="n">remote_source_path</span><span class="p">,</span>
             <span class="n">pattern_to_match</span><span class="o">=</span><span class="n">matcher</span><span class="o">.</span><span class="n">pattern_to_match</span><span class="p">,</span>
             <span class="n">remote_type</span><span class="o">=</span><span class="n">source_type</span><span class="p">,</span>
-            <span class="n">host</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"host"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">source_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"port"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">username</span><span class="o">=</span><span class="p">(</span>
-                <span class="n">source_block</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;username&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">source_block</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"username"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">password</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">get_password_value</span><span class="p">(</span><span class="n">source_block</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source_block</span><span class="p">,</span> <span class="s2">"password"</span><span class="p">)</span>
                 <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">private_key_path</span><span class="o">=</span><span class="p">(</span><span class="n">temp_key_file</span><span class="o">.</span><span class="n">get_path</span><span class="p">()</span> <span class="k">if</span> <span class="n">temp_key_file</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
@@ -1399,7 +1399,7 @@ Returns:
         <span class="n">files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">found</span><span class="p">)</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s2"> remote files in </span><span class="si">{</span><span class="n">remote_source_path</span><span class="si">}</span><span class="s2"> with matcher </span><span class="si">{</span><span class="n">matcher</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s2"> remote files in </span><span class="si">{</span><span class="n">remote_source_path</span><span class="si">}</span><span class="s2"> with matcher </span><span class="si">{</span><span class="n">matcher</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">files</span>
@@ -1751,7 +1751,7 @@ Returns:
     <span class="n">retries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">retry_delay_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
     <span class="n">timeout_seconds</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span><span class="p">,</span>
-    <span class="n">task_run_name</span><span class="o">=</span><span class="s2">&quot;upload-</span><span class="si">{target_file_path}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">task_run_name</span><span class="o">=</span><span class="s2">"upload-</span><span class="si">{target_file_path}</span><span class="s2">"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_file_task</span><span class="p">(</span>
     <span class="n">source_remote_asset</span><span class="p">:</span> <span class="n">RemoteAsset</span><span class="p">,</span>
@@ -1771,7 +1771,7 @@ Returns:
     <span class="n">check_for_space_overhead</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">reference_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Task to upload a single file to a remote destination (local/SFTP/RClone remote).</span>
 
 <span class="sd">    Args:</span>
@@ -1788,13 +1788,13 @@ Returns:
 <span class="sd">        reference_date (datetime): now() in UTC. The reference date to use for checking file modification times. Used in testing.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        Path: The path to the uploaded file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start upload </span><span class="si">{</span><span class="n">source_remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">target_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Start upload </span><span class="si">{</span><span class="n">source_remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">target_file_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="p">(</span>
         <span class="n">destination_block</span><span class="o">.</span><span class="n">get_temp_key_file</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">&quot;get_temp_key_file&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">"get_temp_key_file"</span><span class="p">)</span>
         <span class="k">else</span> <span class="n">nullcontext</span><span class="p">()</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">temp_key_file</span><span class="p">:</span>
         <span class="n">upload_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upload_asset</span><span class="p">(</span>
@@ -1803,19 +1803,19 @@ Returns:
             <span class="n">destination_file</span><span class="o">=</span><span class="n">target_file_path</span><span class="p">,</span>
             <span class="n">destination_type</span><span class="o">=</span><span class="n">destination_type</span><span class="p">,</span>
             <span class="n">host</span><span class="o">=</span><span class="p">(</span>
-                <span class="n">destination_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">&quot;host&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">destination_block</span><span class="o">.</span><span class="n">host</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">"host"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">port</span><span class="o">=</span><span class="p">(</span>
-                <span class="n">destination_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">destination_block</span><span class="o">.</span><span class="n">port</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">"port"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">username</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">destination_block</span><span class="o">.</span><span class="n">username</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">&quot;username&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">"username"</span><span class="p">)</span>
                 <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">password</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">get_password_value</span><span class="p">(</span><span class="n">destination_block</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">destination_block</span><span class="p">,</span> <span class="s2">"password"</span><span class="p">)</span>
                 <span class="k">else</span> <span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">private_key_path</span><span class="o">=</span><span class="p">(</span><span class="n">temp_key_file</span><span class="o">.</span><span class="n">get_path</span><span class="p">()</span> <span class="k">if</span> <span class="n">temp_key_file</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
@@ -1829,9 +1829,9 @@ Returns:
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">upload_result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Failed to upload </span><span class="si">{</span><span class="n">source_remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">target_file_path</span><span class="si">}</span><span class="s2">. Exit code </span><span class="si">{</span><span class="n">upload_result</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Failed to upload </span><span class="si">{</span><span class="n">source_remote_asset</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">target_file_path</span><span class="si">}</span><span class="s2">. Exit code </span><span class="si">{</span><span class="n">upload_result</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Upload failed&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Upload failed"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">target_file_path</span>
 </code></pre></div></td></tr></table></div>
@@ -1899,10 +1899,10 @@ Returns:
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
