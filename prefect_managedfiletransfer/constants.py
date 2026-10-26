@@ -1,6 +1,6 @@
 class CONSTANTS:
     SKIPPED_STATE_NAME = "Skipped"
-    SERVER_LOGO_URL = "https://cdn.sanity.io/images/3ugk85nk/production/fb3f4debabcda1c5a3aeea4f5b3f94c28845e23e-250x250.png"
+    SERVER_LOGO_URL = "https://raw.githubusercontent.com/ImperialCollegeLondon/prefect-managedfiletransfer/docs/img/managed-file-transfer.png"
     ONE_GIGABYTE = 1024 * 1024 * 1024
 
     class ENV_VAR_NAMES:

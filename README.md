@@ -1,8 +1,8 @@
 # Prefect Managed File Transfer
 
 <p align="center">
-    <!--- Insert a cover image here -->
-    <!--- <br> -->
+    <img src="https://raw.githubusercontent.com/ImperialCollegeLondon/prefect-managedfiletransfer/docs/img/managed-file-transfer.png" alt="Prefect Managed File Transfer: Prefect connected to folders labelled M, F and T" width="160" />
+    <br>
     <a href="https://pypi.python.org/pypi/prefect-managedfiletransfer/" alt="PyPI version">
         <img alt="PyPI" src="https://img.shields.io/pypi/v/prefect-managedfiletransfer?color=0052FF&labelColor=090422"></a>
     <a href="https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer/" alt="Stars">
@@ -47,6 +47,10 @@ Example use cases:
 - Delete temporary files older than 7 days from a remote server to free up disk space.
 
 Visit the full docs [here](https://imperialcollegelondon.github.io/prefect-managedfiletransfer).
+
+The server blocks use the logo hosted on the `docs` branch. Its source is
+`docs/img/managed-file-transfer.png`; keep it there so subsequent documentation
+deployments preserve the public image URL.
 
 ### Installation - Local
 
