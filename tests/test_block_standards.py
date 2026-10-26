@@ -24,7 +24,9 @@ def test_server_blocks_use_docs_logo(block):
 
 
 def test_docs_source_preserves_server_logo():
-    logo_path = Path(__file__).resolve().parents[1] / "docs/img/managed-file-transfer.png"
+    logo_path = (
+        Path(__file__).resolve().parents[1] / "docs/img/managed-file-transfer.png"
+    )
     with Image.open(logo_path) as logo:
         assert logo.format == "PNG"
         assert logo.size == (512, 512)
