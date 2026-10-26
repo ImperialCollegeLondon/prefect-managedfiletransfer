@@ -4,7 +4,7 @@
 
 Works best with the preconfigured devcontainer setup in vscode and uv installed
 
-Requires an installation of Python 3.10+
+Requires an installation of Python 3.11+ and the latest uv.
 
 We recommend using a Python virtual environment manager such as uv, pipenv, conda or virtualenv.
 
@@ -19,6 +19,14 @@ uv sync --all-groups
 # Configure pre-commit hooks
 pre-commit install
 ```
+
+To refresh all dependencies, run `uv lock --upgrade` and commit the updated
+`uv.lock` alongside any dependency changes in `pyproject.toml`. Docker and CI use
+the latest uv without a version pin. The lockfile constrains `certifi` to the
+current certificate bundle; pip is included in the development environment.
+The Docker build upgrades Debian packages and system pip, and the entrypoint
+upgrades pip in the runtime Python environment on every start. Starting the
+container therefore requires network access to the Python package index.
 
 To verify the setup was successful you can run the following:
 

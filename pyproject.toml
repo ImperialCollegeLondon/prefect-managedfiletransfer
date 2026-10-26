@@ -1,6 +1,6 @@
 [project]
 name = "prefect-managedfiletransfer"
-version = "0.7.0"
+version = "0.7.1"
 description = "Upload, download, and delete files easily between Local/SFTP/Cloud storage using rclone"
 keywords = ["prefect", "file", "copy","move","transfer","delete","SFTP","rclone"]
 readme = "README.md"
@@ -12,18 +12,17 @@ classifiers = [
     "Intended Audience :: System Administrators",
     "Natural Language :: English",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-    "prefect>=3.1.7",
-    "pydantic>=2.11.0a2",
-    "paramiko>=5.0.0",
+    "prefect>=3.9.0",
+    "pydantic>=2.14.1",
+    "paramiko>=5.1.0",
 ]
 license = "Apache-2.0"
 
@@ -34,7 +33,7 @@ Homepage = "https://github.com/ImperialCollegeLondon/prefect-managedfiletransfer
 prefect_managedfiletransfer = "prefect_managedfiletransfer"
 
 [build-system]
-requires = ["setuptools >= 78.1.1"]
+requires = ["setuptools >= 84.2.1"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
@@ -46,23 +45,23 @@ prefect_managedfiletransfer = ["rclone/**"]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.12.7",
-    "build",
-    "coverage[toml]",
-    "interrogate",
-    "ruff",
-    "mkdocs",
-    "mkdocs-gen-files",
-    "mkdocs-material",
-    "mkdocstrings[python]",
-    "mypy",
-    "pillow",
-    "pre-commit",
-    "pytest",
-    "pytest-asyncio",
-    "typer",
-    "testcontainers>=4.12.0",
-    "prefect-docker>=0.6.6",
+    "ruff>=0.17.2",
+    "build>=1.6.1",
+    "coverage[toml]>=7.17.0",
+    "interrogate>=1.7.0",
+    "mkdocs>=1.6.1",
+    "mkdocs-gen-files>=0.6.1",
+    "mkdocs-material>=9.8.0",
+    "mkdocstrings[python]>=1.0.8",
+    "mypy>=2.4.0",
+    "pillow>=13.0.0",
+    "pip>=26.2.2",
+    "pre-commit>=4.7.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.1",
+    "typer>=0.27.3",
+    "testcontainers>=4.15.0",
+    "prefect-docker>=0.7.4",
 ]
 
 [tool.coverage.run]
@@ -126,3 +125,7 @@ env = ["PREFECT_TEST_MODE=1"]
 
 [tool.uv]
 cache-dir = "./.uv_cache"
+constraint-dependencies = ["certifi>=2026.10.23"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

@@ -7,6 +7,9 @@ if [ -f ~/.bashrc ]; then
   . ~/.bashrc
 fi
 
+echo "+uv pip install --upgrade pip"
+uv pip install --python "$(command -v python)" --upgrade pip
+
 if [ ! -z "$EXTRA_PIP_PACKAGES" ]; then
   echo "+uv pip install $EXTRA_PIP_PACKAGES"
   uv pip install --system $EXTRA_PIP_PACKAGES
