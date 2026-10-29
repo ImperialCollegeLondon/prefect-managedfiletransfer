@@ -222,7 +222,9 @@ async def list_remote_assets(
                     reference_date,
                 )
 
-            if return_code == 0 and rclone_config is not None and config_after:
+            # always save the config back as rclone may have refreshed the token,
+            # even if the command itself failed
+            if rclone_config is not None and config_after:
                 logger.info(
                     f"Updating rclone config for remote {rclone_config.remote_name}"
                 )

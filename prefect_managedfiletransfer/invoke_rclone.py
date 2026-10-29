@@ -164,6 +164,13 @@ def invoke_rclone(
                 "rclone command failed with 'directory not found' error. "
                 "Please check the remote path and ensure it exists."
             )
+        elif return_code != 0 and any(
+            "is a directory or doesn't exist" in line for line in error_lines
+        ):
+            # e.g. 'rclone deletefile' on a file that does not exist
+            ex = FileNotFoundError(
+                "rclone command failed as the remote path is a directory or doesn't exist."
+            )
 
         # Read the config file content after the command execution if it was created
         if temp_config_file is not None:
