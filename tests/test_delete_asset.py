@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from prefect_managedfiletransfer.delete_asset import delete_asset
+from prefect_managedfiletransfer.RCloneConfig import RCloneConfig
 from prefect_managedfiletransfer.RemoteAsset import RemoteAsset
 from prefect_managedfiletransfer.RemoteConnectionType import RemoteConnectionType
 
@@ -190,3 +191,66 @@ async def test_delete_asset_with_invalid_remote_type_raises_error(temp_file_path
         await delete_asset(file=remote_asset, remote_type="INVALID")
 
     assert "Unknown remote type" in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_delete_asset_rclone_missing_file_returns_false(tmp_path):
+    """Deleting a non-existent file via rclone is treated as already deleted."""
+    missing = tmp_path / "does_not_exist.csv"
+    remote_asset = RemoteAsset(path=missing, last_modified=None, size=0)
+
+    result = await delete_asset(
+        file=remote_asset,
+        remote_type=RemoteConnectionType.RCLONE,
+    )
+
+    assert result is False
+
+
+@pytest.mark.asyncio
+async def test_delete_asset_rclone_saves_config_on_missing_file(tmp_path):
+    """The rclone config is saved back even when rclone exits non-zero."""
+    missing = tmp_path / "does_not_exist.csv"
+    rclone_config = RCloneConfig("local")
+    await rclone_config.update_config("[local]\ntype = local\n")
+    updated = []
+    original_update = rclone_config.update_config
+
+    async def tracking_update(contents):
+        updated.append(contents)
+        await original_update(contents)
+
+    rclone_config.update_config = tracking_update
+
+    result = await delete_asset(
+        file=RemoteAsset(path=missing, last_modified=None, size=0),
+        remote_type=RemoteConnectionType.RCLONE,
+        rclone_config=rclone_config,
+    )
+
+    assert result is False
+    assert len(updated) == 1
+    assert "type = local" in updated[0]
+
+
+@pytest.mark.asyncio
+async def test_delete_asset_rclone_saves_config_on_failure(monkeypatch, tmp_path):
+    """The rclone config is saved back even when the delete fails."""
+    rclone_config = RCloneConfig("remote")
+    await rclone_config.update_config("old")
+
+    def fake_invoke_rclone(*args, **kwargs):
+        return 1, "new-token-config", None, None
+
+    monkeypatch.setattr(
+        "prefect_managedfiletransfer.delete_asset.invoke_rclone", fake_invoke_rclone
+    )
+
+    with pytest.raises(RuntimeError):
+        await delete_asset(
+            file=RemoteAsset(path=tmp_path / "x.csv", last_modified=None, size=0),
+            remote_type=RemoteConnectionType.RCLONE,
+            rclone_config=rclone_config,
+        )
+
+    assert rclone_config.get_config() == "new-token-config"

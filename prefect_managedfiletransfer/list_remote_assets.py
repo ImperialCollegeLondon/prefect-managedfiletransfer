@@ -165,6 +165,14 @@ async def list_remote_assets(
                 capture_std_output=True,  # Capture output for processing
             )
 
+            # always save the config back as rclone may have refreshed the token,
+            # even if the command itself failed
+            if rclone_config is not None and config_after:
+                logger.info(
+                    f"Updating rclone config for remote {rclone_config.remote_name}"
+                )
+                await rclone_config.update_config(config_after)
+
             if type(exception) is FileNotFoundError:
                 logger.error(
                     f"Remote folder {remote_folder} does not exist, rclone returned FileNotFoundError"
@@ -221,12 +229,6 @@ async def list_remote_assets(
                     maximum_age_seconds,
                     reference_date,
                 )
-
-            if return_code == 0 and rclone_config is not None and config_after:
-                logger.info(
-                    f"Updating rclone config for remote {rclone_config.remote_name}"
-                )
-                await rclone_config.update_config(config_after)
 
         case _:
             logger.critical(f"Unknown destination type {remote_type}")
