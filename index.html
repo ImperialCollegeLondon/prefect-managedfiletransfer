@@ -382,6 +382,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dependency-management-and-ci-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency management and CI security
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -608,6 +619,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dependency-management-and-ci-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency management and CI security
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -775,6 +797,15 @@ prefect server start
 </code></pre></div>
 9. Use <code>./run_local.sh</code> to deploy a local prefect server, worker, and UI to test your changes
 10. <code>git commit</code>, <code>git push</code>, and create a pull request</p>
+<h3 id="dependency-management-and-ci-security">Dependency management and CI security</h3>
+<ul>
+<li>Normal CI runs <code>uv run --locked</code>, so dependency changes must include a <code>uv.lock</code> generated with <code>uv lock</code>.</li>
+<li>The nightly dev-tests workflow intentionally runs <code>uv add</code> against Prefect's <code>main</code> branch and tests that changed dependency set, so it does not require the committed lock.</li>
+<li>Dependabot checks uv (including transitive dependencies and <code>uv.lock</code>), Docker and GitHub Actions daily.</li>
+<li>Patch and minor Dependabot updates are set to auto-merge (squash) once required checks pass. Major updates (including groups containing a major) are left for human review; this workflow does not itself enforce an approval requirement.</li>
+<li>CodeQL scans run on pull requests, pushes to <code>main</code> and weekly (Mondays 06:00 UTC). Dependency review runs on pull requests and fails on vulnerabilities of any severity.</li>
+<li>The <code>main</code> ruleset currently requires <code>Run Tests (3.12)</code>, <code>Run Tests (3.13)</code> and <code>Pre-commit checks</code>. The new scan workflows are not merge gates until a repository administrator adds their job contexts as required checks. Expected contexts are <code>Analyze (python)</code> and <code>Dependency review</code>; verify the actual names in GitHub first. Dependency review also needs the dependency graph enabled, and its data should cover <code>uv.lock</code>.</li>
+</ul>
 
 
 
