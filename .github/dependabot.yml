@@ -4,16 +4,41 @@ updates:
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     allow:
-      - dependency-type: "all"
+      - dependency-type: "production"
+    groups:
+      # Specify a name for the group, which will be used in pull request titles
+      # and branch names
+      minor-updates:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+  
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    allow:
+      - dependency-type: "development"
+    groups:
+      dev-updates:
+        applies-to: version-updates
 
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "cron"
+      cronjob: "0 6 1,15 * *"
+    groups:
+      group-updates:
+        applies-to: version-updates
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "cron"
+      cronjob: "0 6 1,15 * *"
+    group-updates:
+        applies-to: version-updates
