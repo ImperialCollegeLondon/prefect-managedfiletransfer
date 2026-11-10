@@ -1314,11 +1314,11 @@ wheels = [
 
 [[package]]
 name = "jsonpointer"
-version = "3.9"
+version = "3.10"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/43/a1/33557aa08bb76a1d639db700b65b1aeb3ff10bece6da7bf034edf0262fc2/jsonpointer-3.9.tar.gz", hash = "sha256:b4c52dd58837669881f9677c0e83d73fa0b369feb67563ec4a8b1c13eb3c5a23", size = 19594, upload-time = "2026-11-05T21:05:37.833Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/93/f6/d1109cbb2c7cb692b432071802028052ba8d275c613c1a1cce427bc62c97/jsonpointer-3.10.tar.gz", hash = "sha256:69349c0e738c93e9efa501397091f49ad302ae686293effd05d7755c06f88ef0", size = 19950, upload-time = "2026-11-06T11:39:07.229Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fa/ab/476598b87ea0b15c6ed8bdc75c162f52667cfc9df36a15a35f166a0e4cae/jsonpointer-3.9-py3-none-any.whl", hash = "sha256:a2768328a37c58749b58a3fffd36843e161eeef4c7064832911c865f80bcaded", size = 10255, upload-time = "2026-11-05T21:05:36.673Z" },
+    { url = "https://files.pythonhosted.org/packages/2e/66/25cbb926e981a849d1cfcd36817fba6bfa5e9b6a2944c41230fe83ff25d2/jsonpointer-3.10-py3-none-any.whl", hash = "sha256:3b08b9e5239f1b683e31c9561c350d75ce3fa8cdd407130ca8491fdb0c9e56f3", size = 10376, upload-time = "2026-11-06T11:39:06.069Z" },
 ]
 
 [[package]]
