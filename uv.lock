@@ -2591,7 +2591,7 @@ wheels = [
 
 [[package]]
 name = "pydocket"
-version = "0.31.0"
+version = "0.32.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "burner-redis" },
@@ -2608,9 +2608,9 @@ dependencies = [
     { name = "tzdata", marker = "sys_platform == 'win32'" },
     { name = "uncalled-for" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fd/d4/4ca2b1409ada51d114662bb93d78e2dc32e10b949713176185d63da4cc69/pydocket-0.31.0.tar.gz", hash = "sha256:d04b69370cd8986b97d1332ee859f8285ebfed61363ee49072542ec4e4758dfa", size = 348946, upload-time = "2026-11-20T21:07:00.638Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/99/b7/cac1f1fc574330d001406e6b8d42c21782a3d6cd382f79b0b54da39f735d/pydocket-0.32.1.tar.gz", hash = "sha256:8dc27a45f6b3fd4a2833f1f16bcd0be67e32543a5b1fceb4a3c7bf4663f9bdcf", size = 355790, upload-time = "2026-11-23T19:54:02.487Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d2/e4/829e7938bf791dcded955b0edfa4375c8e09d84dfed1a2786b996c170a1d/pydocket-0.31.0-py3-none-any.whl", hash = "sha256:ff39d8b132091f5c8c831fd0cd94c93ee592049c8cd186bd6670520959c77a17", size = 159982, upload-time = "2026-11-20T21:06:59.393Z" },
+    { url = "https://files.pythonhosted.org/packages/0f/47/74b9f312d110452daba12301d8186c252ba90609d452fdb0854b1799bab7/pydocket-0.32.1-py3-none-any.whl", hash = "sha256:db8492edd59692e263e22b27853c172cb0db98f271a887eba1728df37b1834ea", size = 163042, upload-time = "2026-11-23T19:54:01.205Z" },
 ]
 
 [[package]]
